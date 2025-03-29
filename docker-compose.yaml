@@ -1,0 +1,28 @@
+services:
+  migrations:
+    container_name: migrations
+    build:
+      dockerfile: ./deployment/migrations/Dockerfile
+      context: ./backend/
+    environment:
+      IN_DOCKER_CONTAINER: "true"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:17.4
+    container_name: ztp-db
+    restart: always
+    env_file: ".env"
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ztp_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 2s
+      retries: 3
+
+volumes:
+  ztp_data:
+
