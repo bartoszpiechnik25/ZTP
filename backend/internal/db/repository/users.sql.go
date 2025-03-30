@@ -16,13 +16,13 @@ insert into users (id, name, surname, username, email, phone_number, role) value
 `
 
 type AddUserParams struct {
-	ID          uuid.UUID   `json:"id"`
-	Name        *string     `json:"name"`
-	Surname     *string     `json:"surname"`
-	Username    string      `json:"username"`
-	Email       string      `json:"email"`
-	PhoneNumber string      `json:"phone_number"`
-	Role        interface{} `json:"role"`
+	ID          uuid.UUID `json:"id"`
+	Name        *string   `json:"name"`
+	Surname     *string   `json:"surname"`
+	Username    string    `json:"username"`
+	Email       string    `json:"email"`
+	PhoneNumber string    `json:"phone_number"`
+	Role        UserRole  `json:"role"`
 }
 
 func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) error {

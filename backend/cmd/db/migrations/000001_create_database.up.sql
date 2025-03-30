@@ -1,10 +1,5 @@
-do $$
-begin
-	if not exists (select 1 from pg_type where typname = 'user_role') then
-		create type user_role as enum ('adimn', 'user');
-	end if;
-end
-$$;
+drop type if exists user_role;
+create type user_role as enum ('adimn', 'user');
 
 create table if not exists users (
 	id uuid primary key,
