@@ -16,7 +16,7 @@ import (
 type UserRole string
 
 const (
-	UserRoleAdimn UserRole = "adimn"
+	UserRoleAdmin UserRole = "admin"
 	UserRoleUser  UserRole = "user"
 )
 
@@ -124,7 +124,7 @@ type User struct {
 	Username    string    `json:"username"`
 	Email       string    `json:"email"`
 	PhoneNumber string    `json:"phone_number"`
-	Role        UserRole  `json:"role"`
+	UserRole    UserRole  `json:"user_role"`
 }
 
 type UserDocument struct {

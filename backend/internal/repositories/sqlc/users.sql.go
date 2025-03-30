@@ -12,7 +12,7 @@ import (
 )
 
 const addUser = `-- name: AddUser :exec
-insert into users (id, name, surname, username, email, phone_number, role) values ($1, $2, $3, $4, $5, $6, $7)
+insert into users (id, name, surname, username, email, phone_number, user_role) values ($1, $2, $3, $4, $5, $6, $7)
 `
 
 type AddUserParams struct {
@@ -22,7 +22,7 @@ type AddUserParams struct {
 	Username    string    `json:"username"`
 	Email       string    `json:"email"`
 	PhoneNumber string    `json:"phone_number"`
-	Role        UserRole  `json:"role"`
+	UserRole    UserRole  `json:"user_role"`
 }
 
 func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) error {
@@ -33,13 +33,13 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) error {
 		arg.Username,
 		arg.Email,
 		arg.PhoneNumber,
-		arg.Role,
+		arg.UserRole,
 	)
 	return err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-select id, name, surname, username, email, phone_number, role from users u where u.id = $1
+select id, name, surname, username, email, phone_number, user_role from users u where u.id = $1
 `
 
 func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
@@ -52,13 +52,13 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.Username,
 		&i.Email,
 		&i.PhoneNumber,
-		&i.Role,
+		&i.UserRole,
 	)
 	return i, err
 }
 
 const getUsers = `-- name: GetUsers :many
-select id, name, surname, username, email, phone_number, role from users
+select id, name, surname, username, email, phone_number, user_role from users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -77,7 +77,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.Username,
 			&i.Email,
 			&i.PhoneNumber,
-			&i.Role,
+			&i.UserRole,
 		); err != nil {
 			return nil, err
 		}

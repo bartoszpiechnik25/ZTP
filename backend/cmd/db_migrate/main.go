@@ -30,12 +30,12 @@ func run(logger *logrus.Logger) error {
 	if err != nil {
 		return err
 	}
-	config, err := config.NewDbConfig()
+	config, err := config.New()
 	if err != nil {
 		return err
 	}
 	defer migrations.Close()
-	m, err := migrate.NewWithSourceInstance("iofs", migrations, config.GetConnUrl())
+	m, err := migrate.NewWithSourceInstance("iofs", migrations, config.DbConfig.GetConnUrl())
 
 	if err != nil {
 		return errors.Wrap(err, "cannot create migration")

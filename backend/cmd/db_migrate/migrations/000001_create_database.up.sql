@@ -1,5 +1,5 @@
 drop type if exists user_role cascade;
-create type user_role as enum ('adimn', 'user');
+create type user_role as enum ('admin', 'user');
 
 create table if not exists users (
 	id uuid primary key,
@@ -8,7 +8,7 @@ create table if not exists users (
 	username text not null,
 	email text unique not null,
 	phone_number text not null,
-	role  user_role default 'user' not null
+	user_role user_role not null default 'user'
 );
 
 create table if not exists document_types(
