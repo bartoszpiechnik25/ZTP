@@ -5,4 +5,4 @@ select * from users;
 select * from users u where u.id = $1;
 
 -- name: AddUser :exec
-insert into users (id, name, surname, username, email, phone_number, role) values ($1, $2, $3, $4, $5, $6, $7);
+insert into users (id, name, surname, username, email, phone_number, user_role) values ($1, $2, $3, $4, $5, $6, $7);

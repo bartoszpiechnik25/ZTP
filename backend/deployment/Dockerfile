@@ -11,12 +11,13 @@ RUN go mod download
 
 COPY . /app/
 
-RUN go build -o migrations /app/cmd/db/main.go
+RUN go build -o server /app/cmd/api/main.go
+RUN go build -o migrations /app/cmd/db_migrate/main.go
 
 FROM debian:12-slim
 
 WORKDIR /app
 
-COPY --from=builder /app/migrations /app/.env /app/
+RUN apt update && apt install ca-certificates -y
 
-CMD [ "/app/migrations" ]
+COPY --from=builder /app/server /app/migrations /app/.env /app/
