@@ -66,12 +66,46 @@ type Document struct {
 
 type DocumentCategory struct {
 	ID   uuid.UUID `json:"id"`
-	Name *string   `json:"name"`
+	Name string    `json:"name"`
+}
+
+type DocumentChangeHistory struct {
+	ID                uuid.UUID `json:"id"`
+	DocumentID        uuid.UUID `json:"document_id"`
+	ChangedBy         uuid.UUID `json:"changed_by"`
+	ChangeDescription *string   `json:"change_description"`
+	ChangedAt         time.Time `json:"changed_at"`
+}
+
+type DocumentClassification struct {
+	ID                   uuid.UUID `json:"id"`
+	DocumentID           uuid.UUID `json:"document_id"`
+	ClassificationResult *string   `json:"classification_result"`
+	ConfidenceScore      *float64  `json:"confidence_score"`
+	ClassifiedAt         time.Time `json:"classified_at"`
+}
+
+type DocumentTag struct {
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+type DocumentTagAssociation struct {
+	DocumentID uuid.UUID `json:"document_id"`
+	TagID      uuid.UUID `json:"tag_id"`
 }
 
 type DocumentType struct {
 	ID   uuid.UUID `json:"id"`
-	Name *string   `json:"name"`
+	Name string    `json:"name"`
+}
+
+type DocumentVersion struct {
+	ID            uuid.UUID `json:"id"`
+	DocumentID    uuid.UUID `json:"document_id"`
+	VersionNumber int32     `json:"version_number"`
+	FileUrl       string    `json:"file_url"`
+	CreatedAt     time.Time `json:"created_at"`
 }
 
 type Job struct {

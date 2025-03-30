@@ -1,4 +1,4 @@
-drop type if exists user_role;
+drop type if exists user_role cascade;
 create type user_role as enum ('adimn', 'user');
 
 create table if not exists users (
@@ -6,19 +6,24 @@ create table if not exists users (
 	name text null,
 	surname text null,
 	username text not null,
-	email text not null,
+	email text unique not null,
 	phone_number text not null,
 	role  user_role default 'user' not null
 );
 
 create table if not exists document_types(
 	id uuid primary key,
-	name text
+	name text unique not null
 );
 
 create table if not exists document_categories(
 	id uuid primary key,
-	name text
+	name text unique not null
+);
+
+create table if not exists document_tags (
+    id uuid primary key,
+    name text unique not null
 );
 
 create table if not exists documents (
@@ -28,6 +33,36 @@ create table if not exists documents (
 	ocr_content text null,
 	document_type_id uuid references document_types(id) not null,
 	document_category_id uuid references document_categories(id) not null
+);
+
+create table if not exists document_versions (
+    id uuid primary key,
+    document_id uuid references documents(id) not null,
+    version_number int not null,
+    file_url text not null,
+    created_at timestamptz not null
+);
+
+
+create table if not exists document_change_history (
+    id uuid primary key,
+    document_id uuid references documents(id) not null,
+    changed_by uuid references users(id) not null,
+    change_description text,
+    changed_at timestamptz not null
+);
+
+create table if not exists document_tag_associations (
+    document_id uuid references documents(id) not null,
+    tag_id uuid references document_tags(id) not null
+);
+
+create table if not exists document_classification (
+    id uuid primary key,
+    document_id uuid references documents(id) not null,
+    classification_result text,
+    confidence_score float,
+    classified_at timestamptz not null
 );
 
 create table if not exists user_documents(
