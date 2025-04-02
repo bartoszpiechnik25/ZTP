@@ -34,7 +34,13 @@ func run(logger *logrus.Logger) error {
 	if err != nil {
 		return err
 	}
-	defer migrations.Close()
+	defer func() {
+		err := migrations.Close()
+		if err != nil {
+			logger.Error(err)
+		}
+
+	}()
 	m, err := migrate.NewWithSourceInstance("iofs", migrations, config.DbConfig.GetConnUrl())
 
 	if err != nil {
