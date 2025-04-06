@@ -7,15 +7,6 @@ const (
 	UserRoleUser  UserRole = "user"
 )
 
-type CreateUser struct {
-	Name        *string  `json:"name"`
-	Surname     *string  `json:"surname"`
-	Username    string   `json:"username" validate:"required"`
-	Email       string   `json:"email" validate:"required,email"`
-	PhoneNumber string   `json:"phone_number" validate:"required"`
-	Role        UserRole `json:"role" validate:"required,oneof=admin user"`
-}
-
 type User struct {
 	Name        *string  `json:"name,omitempty"`
 	Surname     *string  `json:"surname,omitempty"`

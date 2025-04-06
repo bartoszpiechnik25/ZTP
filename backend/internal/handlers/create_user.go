@@ -20,7 +20,7 @@ func NewCreateUserHandler(repo *repository.Repository) CreateUser {
 	}
 }
 
-func (h CreateUser) Handle(ctx context.Context, request *models.CreateUser) error {
+func (h CreateUser) Handle(ctx context.Context, request *models.CreateUserRequest) error {
 	user_id := uuid.New()
 	err := h.createUserRepository.Queries.AddUser(ctx, sqlcrepositiories.AddUserParams{
 		ID:          user_id,

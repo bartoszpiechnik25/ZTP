@@ -37,7 +37,6 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 
 func (s *Server) ConfigureHandlers() {
 	s.Router.Post("/user/create", s.handlers.HandleCreateUser)
-	s.Router.Get("/user/{user_id}", s.handlers.HandleGetUserById)
+	s.Router.Get("/user/{username}", s.handlers.HandleGetUserByUsername)
 	s.Router.Get("/user", s.handlers.HandleGetUserByEmail)
-	s.Router.Get("/user", s.handlers.HandleGetUserByUsername)
 }

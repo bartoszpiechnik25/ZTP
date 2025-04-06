@@ -39,7 +39,7 @@ func Test_Utils(t *testing.T) {
 		request_body := io.NopCloser(bytes.NewReader(b))
 
 		// when
-		model, err := MapRequestBodyToAddUserModel(request_body)
+		model, err := MapRequestBody[CreateUserRequest](request_body)
 
 		// then
 		require.NoError(t, err)
@@ -64,7 +64,7 @@ func Test_Utils(t *testing.T) {
 		request_body := io.NopCloser(bytes.NewReader(b))
 
 		// when
-		model, err := MapRequestBodyToAddUserModel(request_body)
+		model, err := MapRequestBody[CreateUserRequest](request_body)
 
 		// then
 		require.Error(t, err)
@@ -88,7 +88,7 @@ func Test_Utils(t *testing.T) {
 		request_body := io.NopCloser(bytes.NewReader(b))
 
 		// when
-		model, err := MapRequestBodyToAddUserModel(request_body)
+		model, err := MapRequestBody[CreateUserRequest](request_body)
 
 		// then
 		require.Error(t, err)

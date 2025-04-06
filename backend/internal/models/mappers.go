@@ -8,20 +8,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func MapRequestBodyToAddUserModel(body io.ReadCloser) (*CreateUser, error) {
-	validate := validator.New()
-	var params CreateUser
-	err := json.NewDecoder(body).Decode(&params)
-	if err != nil {
-		return nil, err
-	}
-	err = validate.Struct(params)
-	if err != nil {
-		return nil, err
-	}
-	return &params, nil
-}
-
 func MapRequestBody[T any](body io.ReadCloser) (*T, error) {
 	validate := validator.New()
 	var request T
