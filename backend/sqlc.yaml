@@ -2,7 +2,7 @@ version: "2"
 sql:
   - engine: "postgresql"
     queries: "./internal/db/queries/"
-    schema: "./cmd/db/migrations/"
+    schema: "./cmd/db_migrate/migrations/"
     gen:
       go:
         package: "sqlcrepositiories"
