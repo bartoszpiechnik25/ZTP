@@ -36,7 +36,7 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 func (s *Server) ConfigureHandlers() {
 	s.Router.Post("/user/create", func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		params, err := utils.MapRequestBodyToAddUserModel(r)
+		params, err := utils.MapRequestBodyToAddUserModel(r.Body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
