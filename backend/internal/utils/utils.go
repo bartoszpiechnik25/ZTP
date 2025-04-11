@@ -1,23 +1,15 @@
 package utils
 
-import (
-	"encoding/json"
-	"net/http"
-	"ztp/internal/models"
+import "github.com/go-playground/validator/v10"
 
-	"github.com/go-playground/validator/v10"
-)
+func ResponseError(errCode int, err error, body map[string]any) {
 
-func MapRequestBodyToAddUserModel(r *http.Request) (*models.CreateUser, error) {
-	validate := validator.New()
-	var params models.CreateUser
-	err := json.NewDecoder(r.Body).Decode(&params)
-	if err != nil {
-		return nil, err
-	}
-	err = validate.Struct(params)
-	if err != nil {
-		return nil, err
-	}
-	return &params, nil
+}
+
+func ResponseSuccess(status int, body map[string]any) {
+
+}
+
+func ValidationErrToJson(err validator.ValidationErrors) {
+
 }

@@ -1,15 +1,12 @@
 package models
 
-type UserRole string
+type GetUserByEmailRequest struct {
+	Email string `json:"email" validate:"email,required"`
+}
 
-const (
-	UserRoleAdimn UserRole = "admin"
-	UserRoleUser  UserRole = "user"
-)
-
-type User struct {
-	Name        *string  `json:"name,omitempty"`
-	Surname     *string  `json:"surname,omitempty"`
+type CreateUserRequest struct {
+	Name        *string  `json:"name"`
+	Surname     *string  `json:"surname"`
 	Username    string   `json:"username" validate:"required"`
 	Email       string   `json:"email" validate:"required,email"`
 	PhoneNumber string   `json:"phone_number" validate:"required"`
