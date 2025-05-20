@@ -23,3 +23,6 @@ go.work.sum
 
 # env file
 .env
+
+# javascript related files
+node_modules/
