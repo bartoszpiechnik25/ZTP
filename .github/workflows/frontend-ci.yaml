@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'frontend/**'
-      - '.github/workflows/frontend.yml'
+      - '.github/workflows/frontend-ci.yaml'
 
 jobs:
   test-and-build:
@@ -45,4 +45,3 @@ jobs:
       #     name: frontend-dist
       #     path: frontend/dist
       #     retention-days: 5
-      
