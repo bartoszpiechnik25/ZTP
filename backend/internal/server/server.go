@@ -2,13 +2,14 @@ package server
 
 import (
 	"time"
+	"ztp/internal/config"
+	"ztp/internal/handlers"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"ztp/internal/config"
-	"ztp/internal/handlers"
+
 	repository "ztp/internal/repositories"
 )
 
@@ -36,7 +37,8 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 }
 
 func (s *Server) ConfigureHandlers() {
-	s.Router.Post("/user/create", s.handlers.HandleCreateUser)
-	s.Router.Get("/user/{username}", s.handlers.HandleGetUserByUsername)
-	s.Router.Get("/user", s.handlers.HandleGetUserByEmail)
+	s.Router.Post("/user/create", s.handlers.Users.HandleCreate)
+	s.Router.Get("/user/{username}", s.handlers.Users.HandleGetByUsername)
+	s.Router.Get("/user", s.handlers.Users.HandleGetByEmail)
+	s.Router.Post("/login", s.handlers.Users.HandleLogin)
 }

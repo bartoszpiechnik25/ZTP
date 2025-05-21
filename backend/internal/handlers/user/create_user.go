@@ -1,11 +1,13 @@
-package handlers
+package user
 
 import (
 	"context"
+	"ztp/internal/models"
+	"ztp/internal/utils"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"ztp/internal/models"
+
 	repository "ztp/internal/repositories"
 	sqlcrepositiories "ztp/internal/repositories/sqlc"
 )
@@ -22,11 +24,16 @@ func NewCreateUserHandler(repo *repository.Repository) CreateUser {
 
 func (h CreateUser) Handle(ctx context.Context, request *models.CreateUserRequest) error {
 	user_id := uuid.New()
-	err := h.createUserRepository.Queries.AddUser(ctx, sqlcrepositiories.AddUserParams{
+	passwordHash, err := utils.HashPassword(request.Password)
+	if err != nil {
+		return errors.Wrap(err, "could not create password hash")
+	}
+	err = h.createUserRepository.Queries.AddUser(ctx, sqlcrepositiories.AddUserParams{
 		ID:          user_id,
 		Name:        request.Name,
 		Surname:     request.Surname,
 		Email:       request.Email,
+		Password:    *passwordHash,
 		PhoneNumber: request.PhoneNumber,
 		Username:    request.Username,
 		UserRole:    sqlcrepositiories.UserRole(request.Role),

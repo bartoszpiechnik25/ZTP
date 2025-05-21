@@ -1,4 +1,4 @@
-gen:
+generate:
 	sqlc generate
 migrate:
 	go run cmd/db/main.go
