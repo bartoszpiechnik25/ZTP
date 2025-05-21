@@ -1,5 +1,12 @@
+version: "2"
+formatters:
+  enable:
+    - gofumpt
+    - gci
+    - goimports
+    - golines
 linters:
-  disable-all: true
+  default: fast
   enable:
     - bodyclose
     - contextcheck
@@ -15,10 +22,7 @@ linters:
     - goconst
     - gocritic
     - gocyclo
-    - gofmt
-    - goimports
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - makezero
@@ -30,63 +34,6 @@ linters:
     - prealloc
     - reassign
     - staticcheck
-    - stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
-run:
-  timeout: 5m
-  modules-download-mode: readonly
-issues:
-  exclude-rules:
-    - path: .*_test.go
-      linters:
-        - funlen
-        - gosec
-        - dupl
-    - path: .*/repositiory/.*
-      linters:
-        - dupl
-  exclude-files:
-    - \\sql.go$
-
-linters-settings:
-  funlen:
-    statements: 50
-    lines: 100
-  depguard:
-    rules:
-      main:
-        files:
-          - $all
-          - "!$test"
-        allow:
-          - $gostd
-          - github.com/testcontainers
-          - github.com/json-iterator/go
-          - github.com/docker
-          - github.com/grpc-ecosystem
-          - delivery
-          - github.com/aws
-          - github.com/google
-          - github.com/pkg/errors
-          - github.com/cenkalti
-          - github.com/gorilla
-          - github.com/golang-migrate
-          - github.com/lib
-          - entgo.io/ent
-      test:
-        files:
-          - "$test"
-        allow:
-          - $gostd
-          - delivery
-          - github.com/google
-          - github.com/pkg/errors
-          - github.com/docker/go-connections/nat
-          - github.com/aws
-          - github.com/testcontainers
-          - github.com/lib/pq
-          - github.com/stretchr/testify
-          - github.com/golang-migrate/migrate/v4

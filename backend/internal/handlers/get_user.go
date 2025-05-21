@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"context"
-	repository "ztp/internal/repositories"
-	sqlcrepositiories "ztp/internal/repositories/sqlc"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	repository "ztp/internal/repositories"
+	sqlcrepositiories "ztp/internal/repositories/sqlc"
 )
 
 type GetUser struct {
@@ -19,7 +19,10 @@ func NewGetUserHandler(repo *repository.Repository) GetUser {
 	}
 }
 
-func (h GetUser) HandleById(ctx context.Context, user_id uuid.UUID) (*sqlcrepositiories.User, error) {
+func (h GetUser) HandleById(
+	ctx context.Context,
+	user_id uuid.UUID,
+) (*sqlcrepositiories.User, error) {
 	user, err := h.getUserRepository.Queries.GetUserByID(ctx, user_id)
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not get user with id: %s", user_id.String())
@@ -27,7 +30,10 @@ func (h GetUser) HandleById(ctx context.Context, user_id uuid.UUID) (*sqlcreposi
 	return &user, nil
 }
 
-func (h GetUser) HandleByUsername(ctx context.Context, username string) (*sqlcrepositiories.User, error) {
+func (h GetUser) HandleByUsername(
+	ctx context.Context,
+	username string,
+) (*sqlcrepositiories.User, error) {
 	user, err := h.getUserRepository.Queries.GetUserByUsername(ctx, username)
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not get user with username: %s", username)

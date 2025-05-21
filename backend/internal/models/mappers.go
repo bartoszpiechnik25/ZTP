@@ -3,9 +3,9 @@ package models
 import (
 	"encoding/json"
 	"io"
-	sqlcrepositiories "ztp/internal/repositories/sqlc"
 
 	"github.com/go-playground/validator/v10"
+	sqlcrepositiories "ztp/internal/repositories/sqlc"
 )
 
 func MapRequestBody[T any](body io.ReadCloser) (*T, error) {

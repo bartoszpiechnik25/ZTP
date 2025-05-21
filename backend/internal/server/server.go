@@ -2,14 +2,14 @@ package server
 
 import (
 	"time"
-	"ztp/internal/config"
-	"ztp/internal/handlers"
-	repository "ztp/internal/repositories"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"ztp/internal/config"
+	"ztp/internal/handlers"
+	repository "ztp/internal/repositories"
 )
 
 type Server struct {

@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"context"
-	"ztp/internal/models"
-	repository "ztp/internal/repositories"
-	sqlcrepositiories "ztp/internal/repositories/sqlc"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"ztp/internal/models"
+	repository "ztp/internal/repositories"
+	sqlcrepositiories "ztp/internal/repositories/sqlc"
 )
 
 type CreateUser struct {
