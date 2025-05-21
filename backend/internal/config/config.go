@@ -47,8 +47,14 @@ type DbConfig struct {
 }
 
 func (c *DbConfig) GetConnUrl() string {
-	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", c.User, c.Password, c.Host, c.Port, c.DbName)
-
+	return fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		c.User,
+		c.Password,
+		c.Host,
+		c.Port,
+		c.DbName,
+	)
 }
 
 type ServerConfig struct {

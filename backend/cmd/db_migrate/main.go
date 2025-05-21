@@ -22,7 +22,6 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Info("migration succeeded")
-
 }
 
 func run(logger *logrus.Logger) error {
@@ -35,14 +34,12 @@ func run(logger *logrus.Logger) error {
 		return err
 	}
 	defer func() {
-		err := migrations.Close()
+		err = migrations.Close()
 		if err != nil {
 			logger.Error(err)
 		}
-
 	}()
 	m, err := migrate.NewWithSourceInstance("iofs", migrations, config.DbConfig.GetConnUrl())
-
 	if err != nil {
 		return errors.Wrap(err, "cannot create migration")
 	}
