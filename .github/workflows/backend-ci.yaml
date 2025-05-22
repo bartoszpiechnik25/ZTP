@@ -26,6 +26,8 @@ jobs:
           GOBIN: ${{ github.workspace }}/bin
       - name: Add tools to path
         run: echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+      - name: Check sql generated files
+        run: sqlc diff
       - name: Generate mocks and sql.go files
         run: make generate
       - name: Run unit tests
