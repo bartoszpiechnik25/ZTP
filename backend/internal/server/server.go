@@ -3,7 +3,7 @@ package server
 import (
 	"time"
 	"ztp/internal/config"
-	"ztp/internal/handlers"
+	"ztp/internal/handlers/user"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -15,14 +15,14 @@ import (
 
 type Server struct {
 	Router     *chi.Mux
-	handlers   handlers.Handlers
+	users      *user.UserService
 	repository *repository.Repository
 }
 
 func New(config *config.Config, pool *pgxpool.Pool) *Server {
 	router := chi.NewMux()
 	repo := repository.New(config.DbConfig, pool)
-	handlers := handlers.New(repo)
+	handlers := user.NewUserService(repo)
 
 	router.Use(middleware.Timeout(time.Duration(config.ServerConfig.Timeout) * time.Second))
 	router.Use(middleware.Logger)
@@ -32,13 +32,13 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 	return &Server{
 		Router:     router,
 		repository: repo,
-		handlers:   handlers,
+		users:      handlers,
 	}
 }
 
 func (s *Server) ConfigureHandlers() {
-	s.Router.Post("/user/create", s.handlers.Users.HandleCreate)
-	s.Router.Get("/user/{username}", s.handlers.Users.HandleGetByUsername)
-	s.Router.Get("/user", s.handlers.Users.HandleGetByEmail)
-	s.Router.Post("/login", s.handlers.Users.HandleLogin)
+	s.Router.Post("/user/create", s.users.HandleCreateUser)
+	s.Router.Get("/user/{username}", s.users.HandleGetByUsername)
+	s.Router.Get("/user", s.users.HandleGetByEmail)
+	s.Router.Post("/login", s.users.HandleLogin)
 }

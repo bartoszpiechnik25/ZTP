@@ -5,81 +5,80 @@ import (
 	e "ztp/internal/error"
 	"ztp/internal/models"
 	repository "ztp/internal/repositories"
-	"ztp/internal/utils"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 )
 
-type User struct {
-	createUser CreateUser
-	getUser    GetUser
+type UserService struct {
+	createUser       UserCreateService
+	authenticateUser UserAuthenticationService
+	getUser          UserRetrieverService
 }
 
-func New(r *repository.Repository) User {
-	return User{
+func NewUserService(r *repository.Repository) *UserService {
+	return &UserService{
 		createUser: NewCreateUserHandler(r),
-		getUser:    NewGetUserHandler(r),
+		getUser:    NewUserRetriver(r),
 	}
 }
 
-func (h *User) HandleCreate(w http.ResponseWriter, r *http.Request) {
+func (h *UserService) HandleCreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	params, err := models.MapRequestBody[models.CreateUserRequest](r.Body)
 	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusBadRequest, "Error mapping request data"))
+		e.HandleAPIError(err, "invalid request data", w, r)
 		return
 	}
-	err = h.createUser.Handle(ctx, params)
+	err = h.createUser.CreateUser(ctx, params)
 	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusBadRequest, "Error creating user"))
+		e.HandleAPIError(err, "could not create user", w, r)
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (h *User) HandleGetByUsername(w http.ResponseWriter, r *http.Request) {
+func (h *UserService) HandleGetByUsername(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	user_email := chi.URLParam(r, "username")
-	user, err := h.getUser.ByUsername(ctx, user_email)
+	if user_email == "" {
+		e.HandleAPIError(e.IncompleteRequestDataError, "invalid request data", w, r)
+		return
+	}
+	user, err := h.getUser.GetByUsername(ctx, user_email)
 	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusNotFound, "error retrieving user"))
+		e.HandleAPIError(err, "error retrieving user", w, r)
 		return
 	}
 	_ = render.Render(w, r, models.MapUserToGetUserByIdResponse(user))
 }
 
-func (h *User) HandleGetByEmail(w http.ResponseWriter, r *http.Request) {
+func (h *UserService) HandleGetByEmail(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	request, err := models.MapRequestBody[models.GetUserByEmailRequest](r.Body)
 	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusBadRequest, "Error mapping request data"))
+		e.HandleAPIError(err, "invalid request data", w, r)
 		return
 	}
-	user, err := h.getUser.ByEmail(ctx, request.Email)
+	user, err := h.getUser.GetByEmail(ctx, request.Email)
 	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusNotFound, "error retrieving user"))
+		e.HandleAPIError(err, "error retrieving user", w, r)
 		return
 	}
 	_ = render.Render(w, r, models.MapUserToGetUserByIdResponse(user))
 }
 
-func (h *User) HandleLogin(w http.ResponseWriter, r *http.Request) {
+func (h *UserService) HandleLogin(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	request, err := models.MapRequestBody[models.LoginRequest](r.Body)
 	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusBadRequest, "Error mapping request data"))
+		e.HandleAPIError(err, "invalid request data", w, r)
 		return
 	}
-	user, err := h.getUser.ByUsername(ctx, request.Username)
+	err = h.authenticateUser.Login(ctx, request)
 	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusNotFound, "error retrieving user"))
+		e.HandleAPIError(err, "error trying to authenticate user", w, r)
 		return
 	}
-	err = utils.ValidPasswordHash(user.Password, request.Password)
-	if err != nil {
-		_ = render.Render(w, r, e.ErrRender(err, http.StatusUnauthorized, "invalid password"))
-		return
-	}
-	_ = render.Render(w, r, models.MapUserToGetUserByIdResponse(user))
+	w.WriteHeader(http.StatusOK)
 }

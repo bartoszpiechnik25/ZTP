@@ -1,5 +1,5 @@
 generate:
-	sqlc generate
+	sqlc generate && go generate ./...
 migrate:
 	go run cmd/db/main.go
 lint:

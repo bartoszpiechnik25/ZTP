@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS users (
     id uuid PRIMARY KEY,
     name text NULL,
     surname text NULL,
-    username text NOT NULL,
-    email text UNIQUE NOT NULL,
+    username text NOT NULL UNIQUE,
+    email text UNIQUE NOT NULL UNIQUE,
     password text NOT NULL,
     phone_number text NOT NULL,
     user_role user_role NOT NULL DEFAULT 'user'
