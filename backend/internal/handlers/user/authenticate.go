@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"ztp/internal/domain"
 	"ztp/internal/models"
 	repository "ztp/internal/repositories"
 	"ztp/internal/utils"
@@ -12,23 +13,23 @@ import (
 )
 
 type UserAutenthicationServiceImpl struct {
-	repository *repository.Repository
+	repository domain.GetUserStore
 }
 
 func NewUserAuthenticationService(repo *repository.Repository) UserAutenthicationServiceImpl {
 	return UserAutenthicationServiceImpl{
-		repository: repo,
+		repository: repo.Queries,
 	}
 }
 
 func (u UserAutenthicationServiceImpl) Login(ctx context.Context, request *models.LoginRequest) error {
-	user, err := u.repository.Queries.GetUserByUsername(ctx, request.Username)
+	user, err := u.repository.GetUserByUsername(ctx, request.Username)
 	if err != nil {
 		return errors.Wrapf(err, "could not retrieve user with username: %s", request.Username)
 	}
 	err = utils.ValidPasswordHash(user.Password, request.Password)
 	if err != nil {
-		return errors.Wrapf(e.InvalidPasswordError, "invalid password for user with username: %s", user.Username)
+		return errors.Wrapf(e.ErrInvalidPassword, "invalid password for user with username: %s", user.Username)
 	}
 	return nil
 }

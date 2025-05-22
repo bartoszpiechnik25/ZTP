@@ -11,7 +11,7 @@ func HandleDbError(err error) error {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {
 			if pgErr.Code == "23505" {
-				return errors.Wrap(AlreadyExsitsError, "insert violates unique constraint")
+				return errors.Wrap(ErrAlreadyExsits, "insert violates unique constraint")
 			}
 		}
 		return errors.Wrap(err, "could not create new record")

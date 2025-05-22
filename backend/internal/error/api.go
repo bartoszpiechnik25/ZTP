@@ -32,13 +32,13 @@ func ErrRender(err error, code int, message string) render.Renderer {
 
 func HandleAPIError(err error, message string, w http.ResponseWriter, r *http.Request) {
 	var statusCode int
-	if errors.Is(err, InvalidPasswordError) {
+	if errors.Is(err, ErrInvalidPassword) {
 		statusCode = http.StatusUnauthorized
-	} else if errors.Is(err, IncompleteRequestDataError) {
+	} else if errors.Is(err, ErrIncompleteRequestData) {
 		statusCode = http.StatusBadRequest
-	} else if errors.Is(err, NotFoundErr) {
+	} else if errors.Is(err, ErrNotFound) {
 		statusCode = http.StatusNotFound
-	} else if errors.Is(err, AlreadyExsitsError) {
+	} else if errors.Is(err, ErrAlreadyExsits) {
 		statusCode = http.StatusConflict
 	} else {
 		statusCode = http.StatusInternalServerError

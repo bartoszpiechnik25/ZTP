@@ -3,9 +3,8 @@ package errors
 import "errors"
 
 var (
-	InvalidPasswordError       = errors.New("invalid password")
-	IncompleteRequestDataError = errors.New("incomplete request data")
-	NotFoundErr                = errors.New("not found")
-	AlreadyExsitsError         = errors.New("already exists")
+	ErrInvalidPassword       = errors.New("invalid password")
+	ErrIncompleteRequestData = errors.New("incomplete request data")
+	ErrNotFound              = errors.New("not found")
+	ErrAlreadyExsits         = errors.New("already exists")
 )
-

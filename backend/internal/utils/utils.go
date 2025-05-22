@@ -2,10 +2,15 @@ package utils
 
 import (
 	"github.com/go-playground/validator/v10"
+	"github.com/pkg/errors"
+	e "ztp/internal/error"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func HashPassword(password string) (*string, error) {
+	if password == "" {
+		return nil, errors.Wrap(e.ErrIncompleteRequestData, "empty password")
+	}
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err

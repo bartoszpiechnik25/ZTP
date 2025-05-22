@@ -18,7 +18,7 @@ type UserService struct {
 
 func NewUserService(r *repository.Repository) *UserService {
 	return &UserService{
-		createUser: NewCreateUserHandler(r),
+		createUser: NewUserCreateService(r),
 		getUser:    NewUserRetriver(r),
 	}
 }
@@ -42,7 +42,7 @@ func (h *UserService) HandleGetByUsername(w http.ResponseWriter, r *http.Request
 	ctx := r.Context()
 	user_email := chi.URLParam(r, "username")
 	if user_email == "" {
-		e.HandleAPIError(e.IncompleteRequestDataError, "invalid request data", w, r)
+		e.HandleAPIError(e.ErrIncompleteRequestData, "invalid request data", w, r)
 		return
 	}
 	user, err := h.getUser.GetByUsername(ctx, user_email)
