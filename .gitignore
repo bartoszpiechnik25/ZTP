@@ -27,4 +27,3 @@ go.work.sum
 # ignore vscode settings
 .vscode/
 mocks/
-sqlc/
