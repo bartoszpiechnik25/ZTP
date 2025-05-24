@@ -1,12 +1,14 @@
 version: v2
 clean: true
 plugins:
-  - local: protoc-gen-go
+  - remote: buf.build/protocolbuffers/go:v1.36.6
     out: go/internal/gen
     opt: paths=source_relative
-  - remote: buf.build/protocolbuffers/python:v28.0
+  - remote: buf.build/protocolbuffers/python:v31.0
     out: python/gen
-  - remote: buf.build/grpc/python:v1.63.0
+  - remote: buf.build/grpc/python:v1.72.0
+    out: python/gen
+  - remote: buf.build/protocolbuffers/pyi:v31.0
     out: python/gen
 inputs:
   - directory: proto

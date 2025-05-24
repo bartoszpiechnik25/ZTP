@@ -1,5 +1,5 @@
 generate:
-	sqlc generate -f ../sqlc.yaml && go generate ./... && cd .. && buf generate --clean
+	sqlc generate -f ../sqlc.yaml && go generate ./... && cd .. && buf generate --clean && find python/gen -type d -exec touch {}/__init__.py \;
 migrate:
 	go run cmd/db/main.go
 lint:

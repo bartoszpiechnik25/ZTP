@@ -42,6 +42,7 @@ def add_DocumentClassifierServiceServicer_to_server(servicer, server):
     generic_handler = grpc.method_handlers_generic_handler(
             'document.intelligence.v1.DocumentClassifierService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('document.intelligence.v1.DocumentClassifierService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
