@@ -1,17 +1,19 @@
 package repository
 
 import (
-	"github.com/jackc/pgx/v5/pgxpool"
 	"ztp/internal/config"
-	sqlcrepositiories "ztp/internal/repositories/sqlc"
+	"ztp/internal/domain"
+	"ztp/internal/repositories/sqlc"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Repository struct {
-	Queries *sqlcrepositiories.Queries
+	Queries domain.Store
 }
 
 func New(c *config.DbConfig, postgres *pgxpool.Pool) *Repository {
 	return &Repository{
-		Queries: sqlcrepositiories.New(postgres),
+		Queries: db.New(postgres),
 	}
 }

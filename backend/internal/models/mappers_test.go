@@ -17,6 +17,7 @@ func Test_Utils(t *testing.T) {
 		Name         *string `json:"name"`
 		Surname      *string `json:"surname"`
 		Username     string  `json:"username"`
+		Password     string  `json:"password"`
 		Email        string  `json:"email"`
 		Phone_number string  `json:"phone_number"`
 		Role         string  `json:"role"`
@@ -30,6 +31,7 @@ func Test_Utils(t *testing.T) {
 			Name:         nil,
 			Surname:      nil,
 			Username:     "john_doe",
+			Password:     "some_weak_password",
 			Email:        "john.doe@gmail.com",
 			Phone_number: "some number",
 			Role:         "user",

@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/go-playground/validator/v10"
-	sqlcrepositiories "ztp/internal/repositories/sqlc"
+	"ztp/internal/repositories/sqlc"
 )
 
 func MapRequestBody[T any](body io.ReadCloser) (*T, error) {
@@ -22,7 +22,7 @@ func MapRequestBody[T any](body io.ReadCloser) (*T, error) {
 	return &request, nil
 }
 
-func MapUserToGetUserByIdResponse(user *sqlcrepositiories.User) *GetUserByIdResponse {
+func MapUserToGetUserByIdResponse(user *db.User) *GetUserByIdResponse {
 	return &GetUserByIdResponse{
 		User: &User{
 			Name:        user.Name,

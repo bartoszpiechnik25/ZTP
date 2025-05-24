@@ -1,93 +1,101 @@
 -- +migrate Up
-
 -- Drop type if it exists and create a new enum type for user roles
-drop type if exists user_role cascade;
-create type user_role as enum ('admin', 'user');
+DROP TYPE IF EXISTS user_role CASCADE;
+
+CREATE EXTENSION pgcrypto;
+
+CREATE TYPE user_role AS enum (
+    'admin',
+    'user'
+);
 
 -- Create users table
-create table if not exists users (
-    id uuid primary key,
-    name text null,
-    surname text null,
-    username text not null,
-    email text unique not null,
-    phone_number text not null,
-    user_role user_role not null default 'user'
+CREATE TABLE IF NOT EXISTS users (
+    id uuid PRIMARY KEY,
+    name text NULL,
+    surname text NULL,
+    username text NOT NULL UNIQUE,
+    email text UNIQUE NOT NULL UNIQUE,
+    password text NOT NULL,
+    phone_number text NOT NULL,
+    user_role user_role NOT NULL DEFAULT 'user'
 );
 
 -- Create document types table
-create table if not exists document_types (
-    id uuid primary key,
-    name text unique not null
+CREATE TABLE IF NOT EXISTS document_types (
+    id uuid PRIMARY KEY,
+    name text UNIQUE NOT NULL
 );
 
 -- Create document categories table
-create table if not exists document_categories (
-    id uuid primary key,
-    name text unique not null
+CREATE TABLE IF NOT EXISTS document_categories (
+    id uuid PRIMARY KEY,
+    name text UNIQUE NOT NULL
 );
 
 -- Create document tags table
-create table if not exists document_tags (
-    id uuid primary key,
-    name text unique not null
+CREATE TABLE IF NOT EXISTS document_tags (
+    id uuid PRIMARY KEY,
+    name text UNIQUE NOT NULL
 );
 
 -- Create documents table
-create table if not exists documents (
-    id uuid primary key,
+CREATE TABLE IF NOT EXISTS documents (
+    id uuid PRIMARY KEY,
     title text,
-    url text not null,
-    ocr_content text null,
-    document_type_id uuid not null references document_types(id),
-    document_category_id uuid not null references document_categories(id)
+    url text NOT NULL,
+    notes text,
+    ocr_content text NULL,
+    document_type_id uuid NOT NULL REFERENCES document_types (id),
+    document_category_id uuid NOT NULL REFERENCES document_categories (id)
 );
 
--- Create document versions table 
-create table if not exists document_versions (
-    id uuid primary key,
-    document_id uuid not null references documents(id),
-    version_number int not null,
-    file_url text not null,
-    created_at timestamptz not null
+-- Create document versions table
+CREATE TABLE IF NOT EXISTS document_versions (
+    id uuid PRIMARY KEY,
+    document_id uuid NOT NULL REFERENCES documents (id),
+    version_number int NOT NULL,
+    file_url text NOT NULL,
+    created_at timestamptz NOT NULL
 );
 
 -- Create document change history table
-create table if not exists document_change_history (
-    id uuid primary key,
-    document_id uuid not null references documents(id),
-    changed_by uuid not null references users(id),
+CREATE TABLE IF NOT EXISTS document_change_history (
+    id uuid PRIMARY KEY,
+    document_id uuid NOT NULL REFERENCES documents (id),
+    changed_by uuid NOT NULL REFERENCES users (id),
     change_description text,
-    changed_at timestamptz not null
+    changed_at timestamptz NOT NULL
 );
 
 -- Create document tag associations table
-create table if not exists document_tag_associations (
-    document_id uuid not null references documents(id),
-    tag_id uuid not null references document_tags(id)
+CREATE TABLE IF NOT EXISTS document_tag_associations (
+    document_id uuid NOT NULL REFERENCES documents (id),
+    tag_id uuid NOT NULL REFERENCES document_tags (id)
 );
 
 -- Create document classification table
-create table if not exists document_classification (
-    id uuid primary key,
-    document_id uuid not null references documents(id),
+CREATE TABLE IF NOT EXISTS document_classification (
+    id uuid PRIMARY KEY,
+    document_id uuid NOT NULL REFERENCES documents (id),
     classification_result text,
     confidence_score float,
-    classified_at timestamptz not null
+    classified_at timestamptz NOT NULL
 );
 
 -- Create user documents table
-create table if not exists user_documents (
-    user_id uuid not null references users(id),
-    document_id uuid not null references documents(id)
+CREATE TABLE IF NOT EXISTS user_documents (
+    user_id uuid NOT NULL REFERENCES users (id),
+    document_id uuid NOT NULL REFERENCES documents (id)
 );
 
 -- Create jobs table
-create table if not exists jobs (
-    id uuid primary key,
+CREATE TABLE IF NOT EXISTS jobs (
+    id uuid PRIMARY KEY,
     status text,
-    user_id uuid references users(id),
-    document_id uuid not null references documents(id),
-    started_at timestamptz not null,
-    finished_at timestamptz null
+    user_id uuid REFERENCES users (id),
+    document_id uuid NOT NULL REFERENCES documents (id),
+    started_at timestamptz NOT NULL,
+    finished_at timestamptz NULL
 );
+
