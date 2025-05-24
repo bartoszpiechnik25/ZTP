@@ -1,158 +1,89 @@
-# ZTP
+# ZTP Application
 
-This is the backend service for the ZTP application. It's written in Go and uses PostgreSQL for data storage.
+This project consists of a Go backend API server and a React frontend, using PostgreSQL for data storage.
 
-## Project Structure
-- `cmd/` - Application entry points
-  - `api/` - API server
-  - `db_migrate/` - Database migration tool
-- `internal/` - Internal packages
-  - `config/` - Application configuration
-  - `db/` - Database access and migrations
-  - `handlers/` - HTTP handlers
-  - `repositories/` - Data access layer
-  - `server/` - HTTP server setup
-
-## Development Setup
+## Quick Start
 
 ### Prerequisites
-
-- Go 1.24 or higher
 - Docker or Podman
-- PostgreSQL 17.4 (can be run with Docker/Podman)
+- Make
+- Go 1.24+ (for local development)
+- Node.js and yarn (for frontend development)
 
-### Install Development Tools
+## Running the Application
 
-```bash
-make install
-```
-
-This will install:
-
-- **mockgen** - for generating mocks for testing
-- **sqlc** - for generating type-safe Go code from SQL
-- **golangci-lint** - for code linting
-- **air** - for hot reloading during development
-
-### Environment Setup
-
-Create a .env file in the project root directory:
-
-```bash
-cp ../.env.example ../.env
-```
-
-Configure the values according to your environment.
-
-### Database Setup
-
-Start a PostgreSQL database:
-
-```bash
-make db-start
-```
-
-Run database migrations:
-
-```bash
-make migrate
-```
-
-Or reset the database completely:
-
-```bash
-make db-reset
-```
-
-### Start the development server:
-
-Run the server with hot-reloading:
-
-```bash
-make dev
-```
-
-You can also run server without hot-reloading feature:
-
-```bash
-make run
-```
-
-### Development tasks
-
-Generate code from SQL and interfaces:
-
-```bash
-make generate
-```
-
-Lint your code:
-
-```bash
-make lint
-```
-
-Fix automatically fixable lint issues:
-
-```bash
-make fix
-```
-
-Run tests:
-
-```bash
-make test
-```
-
-Build binaries:
-
-```bash
-make build
-```
-
-### Testing API Endpoints
-
-Create a new user:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"email": "test@example.com", "username": "testuser", "role": "user", "phone_number": "+48123456789", "password": "testpass"}' localhost:2137/user
-```
-
-Get a user by username:
-
-```bash
-curl -X GET http://localhost:2137/user/testuser
-```
-
-Login:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"username": "testuser", "password": "password123"}' http://localhost:2137/login
-```
-
-## Production Deployment
-
-The project includes Docker/Podman configurations for production deployment. 
-
-### Docker
-
-To start the application with docker simply run the following command:
+### With Docker
 
 ```bash
 docker compose up -d
 ```
 
-It will create posgtres database, run migrations and if migrations succeeds start the server on port `:2137`
+This will:
 
-### Podman
+1. Start PostgreSQL database
+2. Run database migrations
+3. Start the backend server on port :2137
+4. ~~Serve the frontend application~~ **TODO** 
 
-To start the application with podman run the following command:
+### With Podman
 
 ```bash
 podman-compose -f podman-compose.yaml up --build -d
 ```
 
-As podman supports docker runtime but have some caveyats we provided separate `.yaml` compose file for podman runtime to avoid errors.
+We provide a separate compose file for Podman to avoid runtime compatibility issues.
 
 
+## Development Setup
 
+### Backend Development
+
+Setup environment:
+
+```bash
+cd backend
+make install
+```
+
+Start local development server:
+
+```bash
+# Start the database (Docker)
+make db-start
+
+# Run server
+make dev
+```
+
+You may also update the code and run migrations:
+
+```bash
+# Generate code from SQL
+make generate
+
+# Run migrations
+make migrate
+```
+
+See the [README.md](./backend/README.md) for more detailed backend documentation.
+
+### Frontend development
+
+Setup environment:
+
+```bash
+cd frontend
+yarn install
+```
+
+Run frontend server:
+
+```bash
+npm run dev
+```
+
+See the [README.md](./frontend/README.md) for more detailed backend documentation.
+
+***TODO***
+
+---
