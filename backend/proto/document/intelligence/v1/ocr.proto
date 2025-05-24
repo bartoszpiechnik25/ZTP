@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package document.intelligence.v1;
+
+option go_package = "ztp/proto/services/document/intelligence/ocr";
+
+service DocumentOCRService {
+  rpc DetectDocumentText(DetectDocumentTextRequest) returns (DetectDocumentTextResponse);
+}
+
+message DetectDocumentTextRequest {
+  string document_id = 1;
+  string job_id = 2;
+  bytes image = 3;
+}
+
+message DetectDocumentTextResponse {}
