@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package document.intelligence.v1;
 
-option go_package = "ztp/proto/services/document/intelligence/classifier";
+option go_package = "ztp/proto/services/document/intelligence";
 
 service DocumentClassifierService {
   rpc ClassifyDocument(ClassifyDocumentRequest) returns (ClassifyDocumentResponse);

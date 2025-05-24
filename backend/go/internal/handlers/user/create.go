@@ -15,7 +15,7 @@ import (
 )
 
 type UserCreateServiceImpl struct {
-	userStore domain.AddUserStore
+	userStore domain.Store
 }
 
 func NewUserCreateService(repo *repository.Repository) UserCreateServiceImpl {

@@ -1,6 +1,0 @@
-Metadata-Version: 2.4
-Name: document_intelligence
-Version: 0.1.0
-Summary: Generated gRPC code package
-Author: Bartosz Piechnik
-Requires-Python: >=3.8

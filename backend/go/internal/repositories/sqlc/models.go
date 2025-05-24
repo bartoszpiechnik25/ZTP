@@ -112,7 +112,6 @@ type DocumentVersion struct {
 type Job struct {
 	ID         uuid.UUID          `json:"id"`
 	Status     *string            `json:"status"`
-	UserID     pgtype.UUID        `json:"user_id"`
 	DocumentID uuid.UUID          `json:"document_id"`
 	StartedAt  time.Time          `json:"started_at"`
 	FinishedAt pgtype.Timestamptz `json:"finished_at"`

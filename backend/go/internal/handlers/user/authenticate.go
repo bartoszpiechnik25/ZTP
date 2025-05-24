@@ -13,7 +13,7 @@ import (
 )
 
 type UserAutenthicationServiceImpl struct {
-	repository domain.GetUserStore
+	repository domain.Store
 }
 
 func NewUserAuthenticationService(repo *repository.Repository) UserAutenthicationServiceImpl {

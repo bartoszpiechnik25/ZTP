@@ -4,7 +4,7 @@ package document.intelligence.v1;
 
 import "document/intelligence/v1/classifier.proto";
 
-option go_package = "ztp/proto/services/document/intelligence/callback";
+option go_package = "ztp/proto/services/document/intelligence";
 
 service DocumentIntelligenceCallbackService {
   rpc ResumeClassification(ResumeClassificationRequest) returns (ResumeClassificationResponse);

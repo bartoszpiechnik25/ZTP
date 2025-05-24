@@ -30,3 +30,5 @@ mocks/
 
 .ropeproject/
 __pycache__/
+
+document_intelligence.egg-info/

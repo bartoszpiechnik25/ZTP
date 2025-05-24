@@ -93,7 +93,6 @@ CREATE TABLE IF NOT EXISTS user_documents (
 CREATE TABLE IF NOT EXISTS jobs (
     id uuid PRIMARY KEY,
     status text,
-    user_id uuid REFERENCES users (id),
     document_id uuid NOT NULL REFERENCES documents (id),
     started_at timestamptz NOT NULL,
     finished_at timestamptz NULL
