@@ -1,24 +1,89 @@
-# ZTP
+# ZTP Application
 
-## Run app locally
+This project consists of a Go backend API server and a React frontend, using PostgreSQL for data storage.
 
-### Docker
-To start the application with docker simply run the following command:
+## Quick Start
+
+### Prerequisites
+- Docker or Podman
+- Make
+- Go 1.24+ (for local development)
+- Node.js and yarn (for frontend development)
+
+## Running the Application
+
+### With Docker
+
 ```bash
 docker compose up -d
 ```
-It will create posgtres database, run migrations and if migrations succeeds start the server on port `:2137`
 
-### Podman
-To start the application with podman run the following command:
+This will:
+
+1. Start PostgreSQL database
+2. Run database migrations
+3. Start the backend server on port :2137
+4. ~~Serve the frontend application~~ **TODO** 
+
+### With Podman
+
 ```bash
 podman-compose -f podman-compose.yaml up --build -d
 ```
-As podman supports docker runtime but have some caveyats we provided separate `.yaml` compose file for podman runtime to avoid errors.
 
-### Try REST API
-To check if the server is working correctly you can send the following request:
+We provide a separate compose file for Podman to avoid runtime compatibility issues.
+
+
+## Development Setup
+
+### Backend Development
+
+Setup environment:
+
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{"email": "some_artificial_mail@gmail.com", "username": "username", "role": "user", "phone_number": "+48945323417"}' localhost:2137/user/create
+cd backend
+make install
 ```
-It should create user with given data and save it to the database returning status code `201`.
+
+Start local development server:
+
+```bash
+# Start the database (Docker)
+make db-start
+
+# Run server
+make dev
+```
+
+You may also update the code and run migrations:
+
+```bash
+# Generate code from SQL
+make generate
+
+# Run migrations
+make migrate
+```
+
+See the [README.md](./backend/README.md) for more detailed backend documentation.
+
+### Frontend development
+
+Setup environment:
+
+```bash
+cd frontend
+yarn install
+```
+
+Run frontend server:
+
+```bash
+npm run dev
+```
+
+See the [README.md](./frontend/README.md) for more detailed frontend documentation.
+
+***TODO***
+
+---
