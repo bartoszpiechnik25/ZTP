@@ -82,7 +82,7 @@ Run frontend server:
 npm run dev
 ```
 
-See the [README.md](./frontend/README.md) for more detailed backend documentation.
+See the [README.md](./frontend/README.md) for more detailed frontend documentation.
 
 ***TODO***
 
