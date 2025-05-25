@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package document.intelligence.v1;
+
+import "document/intelligence/v1/classifier.proto";
+
+option go_package = "ztp/proto/services/document/intelligence";
+
+service DocumentIntelligenceCallbackService {
+  rpc ResumeClassification(ResumeClassificationRequest) returns (ResumeClassificationResponse);
+  rpc ResumeTextDetection(ResumeTextDetectionRequest) returns (ResumeTextDetectionResponse);
+}
+
+message ResumeClassificationRequest {
+  string job_id = 1;
+  string document_id = 2;
+  DocumentType document_type = 3;
+}
+
+message ResumeTextDetectionRequest {
+  string job_id = 1;
+  string document_id = 2;
+  int32 text_length = 3;
+  string document_content = 4;
+}
+
+message ResumeClassificationResponse {}
+message ResumeTextDetectionResponse {}

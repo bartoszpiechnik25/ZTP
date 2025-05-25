@@ -26,6 +26,10 @@ jobs:
           GOBIN: ${{ github.workspace }}/bin
       - name: Add tools to path
         run: echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
+      - name: Set up Buf
+        uses: bufbuild/buf-setup-action@v1.50.0
+      - name: Verify Buf installation
+        run: buf --version
       - name: Check sql generated files
         run: sqlc diff
       - name: Generate mocks and sql.go files

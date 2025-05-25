@@ -1,12 +1,12 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "./internal/db/queries/"
-    schema: "./cmd/db_migrate/migrations/"
+    queries: "go/internal/db/queries/"
+    schema: "go/cmd/db_migrate/migrations/"
     gen:
       go:
         package: "db"
-        out: "./internal/repositories/sqlc"
+        out: "go/internal/repositories/sqlc"
         sql_package: "pgx/v5"
         emit_pointers_for_null_types: true
         emit_json_tags: true
