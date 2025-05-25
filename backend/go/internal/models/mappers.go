@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/go-playground/validator/v10"
-	"ztp/internal/repositories/sqlc"
+	"ztp/internal/repository"
 )
 
 func MapRequestBody[T any](body io.ReadCloser) (*T, error) {
@@ -22,7 +22,7 @@ func MapRequestBody[T any](body io.ReadCloser) (*T, error) {
 	return &request, nil
 }
 
-func MapUserToGetUserByIdResponse(user *db.User) *GetUserByIdResponse {
+func MapUserToGetUserByIdResponse(user *repository.User) *GetUserByIdResponse {
 	return &GetUserByIdResponse{
 		User: &User{
 			Name:        user.Name,

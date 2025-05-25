@@ -58,6 +58,8 @@ func (c *DbConfig) GetConnUrl() string {
 }
 
 type ServerConfig struct {
-	Port    string `env:"SERVER_PORT"`
-	Timeout int    `env:"SERVER_TIMEOUT"`
+	Port         string `env:"SERVER_PORT"`
+	Timeout      int    `env:"SERVER_TIMEOUT"`
+	JwtAlgo      string `env:"JWT_ALGO"`
+	JwtSecretKey string `env:"JWT_SECRET_KEY"`
 }

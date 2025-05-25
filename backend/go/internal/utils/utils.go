@@ -1,9 +1,10 @@
 package utils
 
 import (
-	"github.com/go-playground/validator/v10"
-	"github.com/pkg/errors"
 	e "ztp/internal/error"
+
+	"github.com/pkg/errors"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,13 +29,4 @@ func ToPtr(value string) *string {
 		return &value
 	}
 	return nil
-}
-
-func ResponseError(errCode int, err error, body map[string]any) {
-}
-
-func ResponseSuccess(status int, body map[string]any) {
-}
-
-func ValidationErrToJson(err validator.ValidationErrors) {
 }

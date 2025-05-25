@@ -5,15 +5,14 @@ import (
 	"time"
 	"ztp/internal/domain"
 	e "ztp/internal/error"
-	repository "ztp/internal/repositories"
-	db "ztp/internal/repositories/sqlc"
+	repository "ztp/internal/repository"
 	"ztp/internal/utils"
 
 	"github.com/google/uuid"
 )
 
 type JobCreateServiceImpl struct {
-	jobsStore domain.Store
+	jobsStore repository.Store
 }
 
 func NewJobCreateService(repo *repository.Repository) JobCreateServiceImpl {
@@ -26,7 +25,7 @@ func (j JobCreateServiceImpl) CreateJob(ctx context.Context, jobStatus domain.Jo
 	job_id := uuid.New()
 	started_at := time.Now()
 
-	err := j.jobsStore.CreateJob(ctx, db.CreateJobParams{
+	err := j.jobsStore.CreateJob(ctx, repository.CreateJobParams{
 		DocumentID: document_id,
 		ID:         job_id,
 		Status:     utils.ToPtr(jobStatus.String()),

@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 	"ztp/internal/models"
-	db "ztp/internal/repositories/sqlc"
+	"ztp/internal/repository"
 )
 
 type UserCreateService interface {
@@ -11,10 +11,10 @@ type UserCreateService interface {
 }
 
 type UserRetrieverService interface {
-	GetByUsername(ctx context.Context, username string) (*db.User, error)
-	GetByEmail(ctx context.Context, email string) (*db.User, error)
+	GetByUsername(ctx context.Context, username string) (*repository.User, error)
+	GetByEmail(ctx context.Context, email string) (*repository.User, error)
 }
 
 type UserAuthenticationService interface {
-	Login(ctx context.Context, request *models.LoginRequest) error
+	Login(ctx context.Context, request *models.LoginRequest) (*string, error)
 }

@@ -3,7 +3,7 @@
 //   sqlc v1.29.0
 // source: jobs.sql
 
-package db
+package repository
 
 import (
 	"context"

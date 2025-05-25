@@ -2,10 +2,8 @@ package user
 
 import (
 	"context"
-	"ztp/internal/domain"
 	"ztp/internal/models"
-	repository "ztp/internal/repositories"
-	db "ztp/internal/repositories/sqlc"
+	"ztp/internal/repository"
 	"ztp/internal/utils"
 
 	"github.com/google/uuid"
@@ -15,7 +13,7 @@ import (
 )
 
 type UserCreateServiceImpl struct {
-	userStore domain.Store
+	userStore repository.Store
 }
 
 func NewUserCreateService(repo *repository.Repository) UserCreateServiceImpl {
@@ -30,7 +28,7 @@ func (h UserCreateServiceImpl) CreateUser(ctx context.Context, request *models.C
 	if err != nil {
 		return errors.Wrapf(err, "could not create password hash for user: %s", request.Username)
 	}
-	err = h.userStore.AddUser(ctx, db.AddUserParams{
+	err = h.userStore.AddUser(ctx, repository.AddUserParams{
 		ID:          userUUID,
 		Name:        request.Name,
 		Surname:     request.Surname,
@@ -38,7 +36,7 @@ func (h UserCreateServiceImpl) CreateUser(ctx context.Context, request *models.C
 		Password:    *passwordHash,
 		PhoneNumber: request.PhoneNumber,
 		Username:    request.Username,
-		UserRole:    db.UserRole(request.Role),
+		UserRole:    repository.UserRole(request.Role),
 	})
 	return e.HandleDbError(err)
 }

@@ -28,9 +28,10 @@ services:
     build:
       dockerfile: ../deployment/python/ocr/Dockerfile
       context: ./backend/python
-    ports:
-      - "${CLASSIFIER_PORT}:${CLASSIFIER_PORT}"
     entrypoint: ["python", "main.py"]
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
   postgres:
     image: postgres:17.4
     container_name: ztp-db

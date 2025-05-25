@@ -4,9 +4,11 @@ import (
 	"net/http"
 	e "ztp/internal/error"
 	"ztp/internal/models"
-	repository "ztp/internal/repositories"
+	"ztp/internal/repository"
+	authService "ztp/internal/handlers/auth"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 )
 
@@ -16,11 +18,11 @@ type UserService struct {
 	getUser          UserRetrieverService
 }
 
-func NewUserService(r *repository.Repository) *UserService {
+func NewUserService(r *repository.Repository, auth *jwtauth.JWTAuth) *UserService {
 	return &UserService{
 		createUser:       NewUserCreateService(r),
 		getUser:          NewUserRetriver(r),
-		authenticateUser: NewUserAuthenticationService(r),
+		authenticateUser: authService.NewUserAuthenticationService(r, auth),
 	}
 }
 
@@ -76,10 +78,14 @@ func (h *UserService) HandleLogin(w http.ResponseWriter, r *http.Request) {
 		e.HandleAPIError(err, "invalid request data", w, r)
 		return
 	}
-	err = h.authenticateUser.Login(ctx, request)
+	token, err := h.authenticateUser.Login(ctx, request)
 	if err != nil {
 		e.HandleAPIError(err, "error trying to authenticate user", w, r)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+	response := models.LoginResponse{
+		Token: *token,
+	}
+
+	_ = render.Render(w, r, &response)
 }

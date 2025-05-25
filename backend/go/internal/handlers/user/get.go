@@ -2,9 +2,7 @@ package user
 
 import (
 	"context"
-	db "ztp/internal/repositories/sqlc"
-
-	repository "ztp/internal/repositories"
+	"ztp/internal/repository"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -20,7 +18,7 @@ func NewUserRetriver(repo *repository.Repository) UserRetrieverServiceImpl {
 	}
 }
 
-func (h UserRetrieverServiceImpl) ById(ctx context.Context, user_id uuid.UUID) (*db.User, error) {
+func (h UserRetrieverServiceImpl) ById(ctx context.Context, user_id uuid.UUID) (*repository.User, error) {
 	user, err := h.userRepository.Queries.GetUserByID(ctx, user_id)
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not get user with id: %s", user_id.String())
@@ -28,7 +26,7 @@ func (h UserRetrieverServiceImpl) ById(ctx context.Context, user_id uuid.UUID) (
 	return &user, nil
 }
 
-func (h UserRetrieverServiceImpl) GetByUsername(ctx context.Context, username string) (*db.User, error) {
+func (h UserRetrieverServiceImpl) GetByUsername(ctx context.Context, username string) (*repository.User, error) {
 	user, err := h.userRepository.Queries.GetUserByUsername(ctx, username)
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not get user with username: %s", username)
@@ -36,7 +34,7 @@ func (h UserRetrieverServiceImpl) GetByUsername(ctx context.Context, username st
 	return &user, nil
 }
 
-func (h UserRetrieverServiceImpl) GetByEmail(ctx context.Context, email string) (*db.User, error) {
+func (h UserRetrieverServiceImpl) GetByEmail(ctx context.Context, email string) (*repository.User, error) {
 	user, err := h.userRepository.Queries.GetUserByEmail(ctx, email)
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not get user with email: %s", email)
@@ -44,7 +42,7 @@ func (h UserRetrieverServiceImpl) GetByEmail(ctx context.Context, email string) 
 	return &user, nil
 }
 
-func (h UserRetrieverServiceImpl) UserExists(ctx context.Context, username string) (*db.UserExistsRow, error) {
+func (h UserRetrieverServiceImpl) UserExists(ctx context.Context, username string) (*repository.UserExistsRow, error) {
 	userExistsRow, err := h.userRepository.Queries.UserExists(ctx, username)
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not get user with username: %s", username)
