@@ -2,7 +2,7 @@ package server
 
 import (
 	"ztp/internal/config"
-	documentintelligence "ztp/internal/handlers/document_intelligence"
+	"ztp/internal/handlers/ocr"
 	"ztp/internal/handlers/user"
 
 	"github.com/go-chi/chi/v5"
@@ -12,23 +12,23 @@ import (
 	"github.com/go-chi/render"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	repository "ztp/internal/repositories"
+	"ztp/internal/repository"
 )
 
 type Server struct {
 	Router     *chi.Mux
 	jwtAuth    *jwtauth.JWTAuth
 	users      *user.UserService
-	ocrService *documentintelligence.OcrServiceImpl
+	ocrService *ocr.OcrServiceImpl
 	repository *repository.Repository
 }
 
 func New(config *config.Config, pool *pgxpool.Pool) *Server {
 	router := chi.NewMux()
-	repo := repository.New(config.DbConfig, pool)
+	repo := repository.NewRepository(config.DbConfig, pool)
 	auth := jwtauth.New(config.ServerConfig.JwtAlgo, []byte(config.ServerConfig.JwtSecretKey), nil)
 	handlers := user.NewUserService(repo, auth)
-	ocr := documentintelligence.NewOcrService(repo)
+	ocrService := ocr.NewOcrService(repo)
 
 	configureRouter(router)
 
@@ -36,7 +36,7 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 		Router:     router,
 		repository: repo,
 		users:      handlers,
-		ocrService: ocr,
+		ocrService: ocrService,
 		jwtAuth:    auth,
 	}
 }
@@ -67,6 +67,6 @@ func configureRouter(router *chi.Mux) {
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
+		MaxAge:           300,
 	}))
 }

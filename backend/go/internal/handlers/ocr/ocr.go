@@ -1,4 +1,4 @@
-package documentintelligence
+package ocr
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	e "ztp/internal/error"
 	document_ml "ztp/internal/grpc"
 	"ztp/internal/handlers/job"
-	repository "ztp/internal/repositories"
+	repository "ztp/internal/repository"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -24,7 +24,7 @@ type OcrServiceImpl struct {
 
 func NewOcrService(repo *repository.Repository) *OcrServiceImpl {
 	return &OcrServiceImpl{
-		ocrGrpc: document_ml.NewOcrService(),
+		ocrGrpc:    document_ml.NewOcrService(),
 		jobService: job.NewJobCreateService(repo),
 	}
 }

@@ -1,12 +1,10 @@
-package user
+package auth
 
 import (
 	"context"
 	"time"
-	"ztp/internal/domain"
 	"ztp/internal/models"
-	repository "ztp/internal/repositories"
-	db "ztp/internal/repositories/sqlc"
+	repository "ztp/internal/repository"
 	"ztp/internal/utils"
 
 	e "ztp/internal/error"
@@ -17,7 +15,7 @@ import (
 )
 
 type UserAutenthicationServiceImpl struct {
-	repository domain.Store
+	repository repository.Store
 	TokenAuth  *jwtauth.JWTAuth
 }
 
@@ -31,7 +29,8 @@ func NewUserAuthenticationService(repo *repository.Repository, auth *jwtauth.JWT
 func (u UserAutenthicationServiceImpl) Login(ctx context.Context, request *models.LoginRequest) (*string, error) {
 	user, err := u.repository.GetUserByUsername(ctx, request.Username)
 	if err != nil {
-		return nil, errors.Wrapf(err, "could not retrieve user with username: %s", request.Username)
+		return nil, e.HandleDbError(err)
+		// return nil, errors.Wrapf(err, "could not retrieve user with username: %s", request.Username)
 	}
 	err = utils.ValidPasswordHash(user.Password, request.Password)
 	if err != nil {
@@ -44,12 +43,12 @@ func (u UserAutenthicationServiceImpl) Login(ctx context.Context, request *model
 	return utils.ToPtr(token), nil
 }
 
-func claimsFromUser(user db.User) map[string]any {
+func claimsFromUser(user repository.User) map[string]any {
 	now := time.Now()
 	return map[string]any{
 		"user_id": user.ID.String(),
 		"role":    string(user.UserRole),
-		"exp":     now.Add(1 * time.Hour).Unix(),
+		"exp":     now.Add(12 * time.Hour).Unix(),
 		"iat":     now.Unix(),
 		"nbf":     now.Unix(),
 	}

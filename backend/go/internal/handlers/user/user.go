@@ -4,7 +4,8 @@ import (
 	"net/http"
 	e "ztp/internal/error"
 	"ztp/internal/models"
-	repository "ztp/internal/repositories"
+	"ztp/internal/repository"
+	authService "ztp/internal/handlers/auth"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
@@ -21,7 +22,7 @@ func NewUserService(r *repository.Repository, auth *jwtauth.JWTAuth) *UserServic
 	return &UserService{
 		createUser:       NewUserCreateService(r),
 		getUser:          NewUserRetriver(r),
-		authenticateUser: NewUserAuthenticationService(r, auth),
+		authenticateUser: authService.NewUserAuthenticationService(r, auth),
 	}
 }
 

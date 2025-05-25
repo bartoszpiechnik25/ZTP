@@ -5,7 +5,7 @@ import (
 	"testing"
 	"ztp/internal/mock"
 	"ztp/internal/models"
-	repository "ztp/internal/repositories"
+	"ztp/internal/repository"
 	"ztp/internal/utils"
 
 	"github.com/golang/mock/gomock"
