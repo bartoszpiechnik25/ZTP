@@ -16,5 +16,5 @@ type UserRetrieverService interface {
 }
 
 type UserAuthenticationService interface {
-	Login(ctx context.Context, request *models.LoginRequest) error
+	Login(ctx context.Context, request *models.LoginRequest) (*string, error)
 }

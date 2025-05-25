@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -16,6 +17,7 @@ import (
 
 type Server struct {
 	Router     *chi.Mux
+	jwtAuth    *jwtauth.JWTAuth
 	users      *user.UserService
 	ocrService *documentintelligence.OcrServiceImpl
 	repository *repository.Repository
@@ -24,7 +26,8 @@ type Server struct {
 func New(config *config.Config, pool *pgxpool.Pool) *Server {
 	router := chi.NewMux()
 	repo := repository.New(config.DbConfig, pool)
-	handlers := user.NewUserService(repo)
+	auth := jwtauth.New(config.ServerConfig.JwtAlgo, []byte(config.ServerConfig.JwtSecretKey), nil)
+	handlers := user.NewUserService(repo, auth)
 	ocr := documentintelligence.NewOcrService(repo)
 
 	configureRouter(router)
@@ -34,15 +37,23 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 		repository: repo,
 		users:      handlers,
 		ocrService: ocr,
+		jwtAuth:    auth,
 	}
 }
 
 func (s *Server) ConfigureHandlers() {
+	// Private routes
+	s.Router.Group(func(r chi.Router) {
+		r.Use(jwtauth.Verifier(s.jwtAuth))
+		r.Use(jwtauth.Authenticator(s.jwtAuth))
+		r.Get("/user/{username}", s.users.HandleGetByUsername)
+		r.Get("/user", s.users.HandleGetByEmail)
+		r.Post("/document/ocr/{id}", s.ocrService.HandleDetectDocumentText)
+	})
+
+	// Public routes
 	s.Router.Post("/user/create", s.users.HandleCreateUser)
-	s.Router.Get("/user/{username}", s.users.HandleGetByUsername)
-	s.Router.Get("/user", s.users.HandleGetByEmail)
 	s.Router.Post("/login", s.users.HandleLogin)
-	s.Router.Post("/document/ocr/{id}", s.ocrService.HandleDetectDocumentText)
 }
 
 func configureRouter(router *chi.Mux) {
@@ -51,7 +62,7 @@ func configureRouter(router *chi.Mux) {
 	router.Use(middleware.RequestID)
 	router.Use(render.SetContentType(render.ContentTypeJSON))
 	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"https://*", "http://*"},
+		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
