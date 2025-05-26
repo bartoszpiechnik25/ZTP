@@ -1,8 +1,10 @@
 from server.server import serve
+from server.config import Config
 
 
 def main():
-    serve("[::]:50051")
+    config = Config()
+    serve(config)
 
 
 if __name__ == "__main__":

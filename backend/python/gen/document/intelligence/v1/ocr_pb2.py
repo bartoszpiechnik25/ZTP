@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\"document/intelligence/v1/ocr.proto\x12\x18\x64ocument.intelligence.v1\"i\n\x19\x44\x65tectDocumentTextRequest\x12\x1f\n\x0b\x64ocument_id\x18\x01 \x01(\tR\ndocumentId\x12\x15\n\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x14\n\x05image\x18\x03 \x01(\x0cR\x05image\"\x1c\n\x1a\x44\x65tectDocumentTextResponse2\x95\x01\n\x12\x44ocumentOCRService\x12\x7f\n\x12\x44\x65tectDocumentText\x12\x33.document.intelligence.v1.DetectDocumentTextRequest\x1a\x34.document.intelligence.v1.DetectDocumentTextResponseB*Z(ztp/proto/services/document/intelligenceb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\"document/intelligence/v1/ocr.proto\x12\x18\x64ocument.intelligence.v1\"p\n\x19\x44\x65tectDocumentTextRequest\x12\x1f\n\x0b\x64ocument_id\x18\x01 \x01(\tR\ndocumentId\x12\x15\n\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x1b\n\timage_url\x18\x03 \x01(\tR\x08imageUrl\"\x1c\n\x1a\x44\x65tectDocumentTextResponse2\x95\x01\n\x12\x44ocumentOCRService\x12\x7f\n\x12\x44\x65tectDocumentText\x12\x33.document.intelligence.v1.DetectDocumentTextRequest\x1a\x34.document.intelligence.v1.DetectDocumentTextResponseB*Z(ztp/proto/services/document/intelligenceb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,9 +33,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z(ztp/proto/services/document/intelligence'
   _globals['_DETECTDOCUMENTTEXTREQUEST']._serialized_start=64
-  _globals['_DETECTDOCUMENTTEXTREQUEST']._serialized_end=169
-  _globals['_DETECTDOCUMENTTEXTRESPONSE']._serialized_start=171
-  _globals['_DETECTDOCUMENTTEXTRESPONSE']._serialized_end=199
-  _globals['_DOCUMENTOCRSERVICE']._serialized_start=202
-  _globals['_DOCUMENTOCRSERVICE']._serialized_end=351
+  _globals['_DETECTDOCUMENTTEXTREQUEST']._serialized_end=176
+  _globals['_DETECTDOCUMENTTEXTRESPONSE']._serialized_start=178
+  _globals['_DETECTDOCUMENTTEXTRESPONSE']._serialized_end=206
+  _globals['_DOCUMENTOCRSERVICE']._serialized_start=209
+  _globals['_DOCUMENTOCRSERVICE']._serialized_end=358
 # @@protoc_insertion_point(module_scope)

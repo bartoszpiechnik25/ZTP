@@ -11,7 +11,7 @@ service DocumentOCRService {
 message DetectDocumentTextRequest {
   string document_id = 1;
   string job_id = 2;
-  bytes image = 3;
+  string image_url = 3;
 }
 
 message DetectDocumentTextResponse {}
