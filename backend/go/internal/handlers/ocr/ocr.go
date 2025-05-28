@@ -21,9 +21,9 @@ type OcrServiceImpl struct {
 	jobService job.JobCreateService
 }
 
-func NewOcrService(repo *repository.Repository) *OcrServiceImpl {
+func NewOcrService(repo *repository.Repository, schedulerGrpcAddr string) *OcrServiceImpl {
 	return &OcrServiceImpl{
-		ocrGrpc:    document_ml.NewOcrService(),
+		ocrGrpc:    document_ml.NewOcrService(schedulerGrpcAddr),
 		jobService: job.NewJobCreateService(repo),
 	}
 }

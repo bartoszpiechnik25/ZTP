@@ -27,7 +27,7 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 	repo := repository.NewRepository(config.DbConfig, pool)
 	auth := jwtauth.New(config.ServerConfig.JwtAlgo, []byte(config.ServerConfig.JwtSecretKey), nil)
 	handlers := user.NewUserService(repo, auth)
-	ocrService := ocr.NewOcrService(repo)
+	ocrService := ocr.NewOcrService(repo, config.GrpcConfig.SchedulerGrpcAddr)
 
 	configureRouter(router)
 

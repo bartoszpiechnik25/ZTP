@@ -12,6 +12,7 @@ import (
 type Config struct {
 	ServerConfig *ServerConfig
 	DbConfig     *DbConfig
+	GrpcConfig   *GrpcConfig
 }
 
 func New() (*Config, error) {
@@ -32,9 +33,17 @@ func New() (*Config, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "could not parse .env file")
 	}
+
+	var grpcConfig GrpcConfig
+	err = env.Parse(&grpcConfig)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not parse .env file")
+	}
+
 	return &Config{
 		DbConfig:     &dbConfig,
 		ServerConfig: &serverConfig,
+		GrpcConfig:   &grpcConfig,
 	}, nil
 }
 
@@ -44,6 +53,12 @@ type DbConfig struct {
 	User     string `env:"POSTGRES_USER"`
 	Password string `env:"POSTGRES_PASSWORD"`
 	Port     string `env:"POSTGRES_PORT"`
+}
+
+type GrpcConfig struct {
+	SchedulerGrpcAddr      string `env:"SCHEDULER_GRPC_ADDR"`
+	OcrCallbackPort        string `env:"OCR_CALLBACK_PORT"`
+	ClassifierCallbackPort string `env:"CLASSIFIER_CALLBACK_PORT"`
 }
 
 func (c *DbConfig) GetConnUrl() string {

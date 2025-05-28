@@ -8,7 +8,7 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY ./ocr pyproject.toml /app/
+COPY ./scheduler pyproject.toml /app/
 
 COPY gen/ gen/
 

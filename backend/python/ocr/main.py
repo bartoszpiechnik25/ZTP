@@ -1,10 +1,11 @@
-from server.server import serve
-from server.config import Config
+from worker.worker import Worker
+from worker.config import Config
 
 
 def main():
     config = Config()
-    serve(config)
+    worker = Worker(config)
+    worker.run()
 
 
 if __name__ == "__main__":

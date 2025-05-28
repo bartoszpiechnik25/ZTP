@@ -13,8 +13,8 @@ type Ocr struct {
 	grpcClient pb.DocumentOCRServiceClient
 }
 
-func NewOcrService() *Ocr {
-	conn, err := grpc.NewClient("classifier:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+func NewOcrService(schedulerGrpcAddr string) *Ocr {
+	conn, err := grpc.NewClient(schedulerGrpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic("could not create grpc client")
 	}
