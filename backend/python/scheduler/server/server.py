@@ -8,7 +8,7 @@ import logging
 from rich.logging import RichHandler
 from .message import Message
 from .config import Config
-from .worker import Queue
+from .publisher import Publisher
 
 logging.basicConfig(
     level=logging.INFO,
@@ -22,7 +22,7 @@ logger = logging.getLogger("document-ocr")
 class Scheduler(
     ocr.DocumentOCRServiceServicer, classifier.DocumentClassifierServiceServicer
 ):
-    def __init__(self, worker: Queue):
+    def __init__(self, worker: Publisher):
         self.worker = worker
 
     def DetectDocumentText(
@@ -67,7 +67,7 @@ class Scheduler(
 
 
 def serve(config: Config):
-    worker = Queue(config)
+    worker = Publisher(config)
     port = config.get_ocr_port()
     servicer = Scheduler(worker)
     server = grpc.server(ThreadPoolExecutor(max_workers=5))

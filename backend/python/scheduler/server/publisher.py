@@ -4,7 +4,7 @@ from .message import Message
 from .config import Config
 
 
-class Queue:
+class Publisher:
     def __init__(self, config: Config):
         self.ocr_queue_url = config.get_ocr_queue_url()
         self.ocr_sqs: SQSClient = Session().client(

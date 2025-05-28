@@ -12,6 +12,6 @@ awslocal sqs create-queue --queue-name "$OCR_QUEUE_NAME"
 awslocal sqs create-queue --queue-name "$CLASSIFIER_QUEUE_NAME"
 
 echo "Creating S3 bucket: ztp-images"
-awslocal s3api create-bucket --bucket ztp-images
+awslocal s3api create-bucket --bucket "$S3_BUCKET_NAME"
 
 echo "✅ LocalStack resources created!"

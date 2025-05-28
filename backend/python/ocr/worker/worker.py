@@ -5,11 +5,19 @@ from .config import Config
 from .log import logger
 from typing import Tuple
 import time
+import document.intelligence.v1.callback_pb2_grpc as callback_grpc
+import document.intelligence.v1.callback_pb2 as callback_data
+import grpc
 
 
 class Worker:
     def __init__(self, config: Config):
         self.queue_url = config.get_ocr_queue_url()
+        self.ocr_callback_url = config.CALLBACK_GRPC_ADDR
+        self.grpc_channel = grpc.insecure_channel(self.ocr_callback_url)
+        self.stub = callback_grpc.DocumentIntelligenceCallbackServiceStub(
+            self.grpc_channel
+        )
         self.sqs: SQSClient = Session().client(
             "sqs",
             region_name=config.REGION,
@@ -55,8 +63,34 @@ class Worker:
     def handle_message(self, message: Message, receipt: str):
         logger.info(f"Handling message: {message}")
 
-        # implement handling ocr
-        time.sleep(3)
+        try:
+            # Simulate some processing
+            time.sleep(3)
 
-        logger.info(f"Finishing processing {message}")
-        self.sqs.delete_message(QueueUrl=self.queue_url, ReceiptHandle=receipt)
+            self.callback(
+                job_id=str(message.job_id),
+                document_id=str(message.document_id),
+                text_length=23,
+                content="some random str rn",
+            )
+
+            logger.info(f"Finishing processing {message}")
+
+            self.sqs.delete_message(QueueUrl=self.queue_url, ReceiptHandle=receipt)
+
+        except grpc.RpcError as e:
+            logger.error(f"gRPC callback failed: {e.details()} (code: {e.code()})")
+
+        except Exception as e:
+            logger.error(f"Unhandled exception while processing message: {e}")
+
+    def callback(self, job_id: str, document_id: str, text_length: int, content: str):
+        request = callback_data.ResumeTextDetectionRequest(
+            job_id=job_id,
+            document_id=document_id,
+            text_length=text_length,
+            document_content=content,
+        )
+        logger.info(f"Sending gRPC callback for job_id={job_id}")
+        self.stub.ResumeTextDetection(request)
+        logger.info("gRPC callback sent successfully")

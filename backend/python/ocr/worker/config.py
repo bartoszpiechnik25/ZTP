@@ -9,6 +9,7 @@ class Config:
     REGION = os.getenv("AWS_DEFAULT_REGION")
     CLASSIFIER_PORT = os.getenv("CLASSIFIER_PORT")
     SCHEDULER_PORT = os.getenv("SCHEDULER_PORT")
+    CALLBACK_GRPC_ADDR = os.getenv("CALLBACK_GRPC_ADDR")
 
     def get_ocr_queue_url(self) -> str:
         return "http://localstack:4566/000000000000/ocr"
