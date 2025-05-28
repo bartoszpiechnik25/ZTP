@@ -4,6 +4,7 @@ import (
 	"ztp/internal/config"
 	"ztp/internal/handlers/ocr"
 	"ztp/internal/handlers/user"
+	"ztp/internal/repository"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -11,8 +12,6 @@ import (
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/jackc/pgx/v5/pgxpool"
-
-	"ztp/internal/repository"
 )
 
 type Server struct {
@@ -28,7 +27,7 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 	repo := repository.NewRepository(config.DbConfig, pool)
 	auth := jwtauth.New(config.ServerConfig.JwtAlgo, []byte(config.ServerConfig.JwtSecretKey), nil)
 	handlers := user.NewUserService(repo, auth)
-	ocrService := ocr.NewOcrService(repo)
+	ocrService := ocr.NewOcrService(repo, config.GrpcConfig.SchedulerGrpcAddr)
 
 	configureRouter(router)
 
@@ -48,12 +47,12 @@ func (s *Server) ConfigureHandlers() {
 		r.Use(jwtauth.Authenticator(s.jwtAuth))
 		r.Get("/user/{username}", s.users.HandleGetByUsername)
 		r.Get("/user", s.users.HandleGetByEmail)
-		r.Post("/document/ocr/{id}", s.ocrService.HandleDetectDocumentText)
 	})
 
 	// Public routes
 	s.Router.Post("/user/create", s.users.HandleCreateUser)
 	s.Router.Post("/login", s.users.HandleLogin)
+	s.Router.Post("/document/ocr/{id}", s.ocrService.HandleDetectDocumentText)
 }
 
 func configureRouter(router *chi.Mux) {

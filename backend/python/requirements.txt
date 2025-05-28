@@ -1,4 +1,5 @@
 grpcio==1.71.0
 boto3==1.38.23
 rich==14.0.0
+types-boto3-sqs==1.38.0
 protobuf==6.31.0

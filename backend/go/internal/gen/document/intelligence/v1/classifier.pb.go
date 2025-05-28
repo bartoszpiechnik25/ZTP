@@ -71,7 +71,7 @@ type ClassifyDocumentRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DocumentId    string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty"`
 	JobId         string                 `protobuf:"bytes,2,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
-	Image         []byte                 `protobuf:"bytes,3,opt,name=image,proto3" json:"image,omitempty"`
+	ImageUrl      string                 `protobuf:"bytes,3,opt,name=image_url,json=imageUrl,proto3" json:"image_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -120,11 +120,11 @@ func (x *ClassifyDocumentRequest) GetJobId() string {
 	return ""
 }
 
-func (x *ClassifyDocumentRequest) GetImage() []byte {
+func (x *ClassifyDocumentRequest) GetImageUrl() string {
 	if x != nil {
-		return x.Image
+		return x.ImageUrl
 	}
-	return nil
+	return ""
 }
 
 type ClassifyDocumentResponse struct {
@@ -167,12 +167,12 @@ var File_document_intelligence_v1_classifier_proto protoreflect.FileDescriptor
 
 const file_document_intelligence_v1_classifier_proto_rawDesc = "" +
 	"\n" +
-	")document/intelligence/v1/classifier.proto\x12\x18document.intelligence.v1\"g\n" +
+	")document/intelligence/v1/classifier.proto\x12\x18document.intelligence.v1\"n\n" +
 	"\x17ClassifyDocumentRequest\x12\x1f\n" +
 	"\vdocument_id\x18\x01 \x01(\tR\n" +
 	"documentId\x12\x15\n" +
-	"\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x14\n" +
-	"\x05image\x18\x03 \x01(\fR\x05image\"\x1a\n" +
+	"\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x1b\n" +
+	"\timage_url\x18\x03 \x01(\tR\bimageUrl\"\x1a\n" +
 	"\x18ClassifyDocumentResponse*H\n" +
 	"\fDocumentType\x12\x1d\n" +
 	"\x19DOCUMENT_TYPE_UNSPECIFIED\x10\x00\x12\x19\n" +

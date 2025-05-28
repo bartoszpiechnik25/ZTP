@@ -12,6 +12,8 @@ import (
 type Config struct {
 	ServerConfig *ServerConfig
 	DbConfig     *DbConfig
+	GrpcConfig   *GrpcConfig
+	AwsConfig    *AwsConfig
 }
 
 func New() (*Config, error) {
@@ -32,9 +34,24 @@ func New() (*Config, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "could not parse .env file")
 	}
+
+	var grpcConfig GrpcConfig
+	err = env.Parse(&grpcConfig)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not parse .env file")
+	}
+
+	var awsConfig AwsConfig
+	err = env.Parse(&awsConfig)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not parse .env file")
+	}
+
 	return &Config{
 		DbConfig:     &dbConfig,
 		ServerConfig: &serverConfig,
+		GrpcConfig:   &grpcConfig,
+		AwsConfig:    &awsConfig,
 	}, nil
 }
 
@@ -62,4 +79,16 @@ type ServerConfig struct {
 	Timeout      int    `env:"SERVER_TIMEOUT"`
 	JwtAlgo      string `env:"JWT_ALGO"`
 	JwtSecretKey string `env:"JWT_SECRET_KEY"`
+}
+
+type GrpcConfig struct {
+	SchedulerGrpcAddr string `env:"SCHEDULER_GRPC_ADDR"`
+	OcrCallbackPort   string `env:"OCR_CALLBACK_PORT"`
+	CallbackPort      string `env:"CALLBACK_PORT"`
+}
+
+type AwsConfig struct {
+	AwsAccessKey       string `env:"AWS_ACCESS_KEY"`
+	AesSecretAccessKey string `env:"AWS_SECRET_ACCESS_KEY"`
+	AwsDefaultRegion   string `env:"AWS_DEFAULT_REGION"`
 }

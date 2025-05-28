@@ -25,7 +25,7 @@ type DetectDocumentTextRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DocumentId    string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty"`
 	JobId         string                 `protobuf:"bytes,2,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
-	Image         []byte                 `protobuf:"bytes,3,opt,name=image,proto3" json:"image,omitempty"`
+	ImageUrl      string                 `protobuf:"bytes,3,opt,name=image_url,json=imageUrl,proto3" json:"image_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -74,11 +74,11 @@ func (x *DetectDocumentTextRequest) GetJobId() string {
 	return ""
 }
 
-func (x *DetectDocumentTextRequest) GetImage() []byte {
+func (x *DetectDocumentTextRequest) GetImageUrl() string {
 	if x != nil {
-		return x.Image
+		return x.ImageUrl
 	}
-	return nil
+	return ""
 }
 
 type DetectDocumentTextResponse struct {
@@ -121,12 +121,12 @@ var File_document_intelligence_v1_ocr_proto protoreflect.FileDescriptor
 
 const file_document_intelligence_v1_ocr_proto_rawDesc = "" +
 	"\n" +
-	"\"document/intelligence/v1/ocr.proto\x12\x18document.intelligence.v1\"i\n" +
+	"\"document/intelligence/v1/ocr.proto\x12\x18document.intelligence.v1\"p\n" +
 	"\x19DetectDocumentTextRequest\x12\x1f\n" +
 	"\vdocument_id\x18\x01 \x01(\tR\n" +
 	"documentId\x12\x15\n" +
-	"\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x14\n" +
-	"\x05image\x18\x03 \x01(\fR\x05image\"\x1c\n" +
+	"\x06job_id\x18\x02 \x01(\tR\x05jobId\x12\x1b\n" +
+	"\timage_url\x18\x03 \x01(\tR\bimageUrl\"\x1c\n" +
 	"\x1aDetectDocumentTextResponse2\x95\x01\n" +
 	"\x12DocumentOCRService\x12\x7f\n" +
 	"\x12DetectDocumentText\x123.document.intelligence.v1.DetectDocumentTextRequest\x1a4.document.intelligence.v1.DetectDocumentTextResponseB*Z(ztp/proto/services/document/intelligenceb\x06proto3"

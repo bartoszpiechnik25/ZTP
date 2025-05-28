@@ -3,7 +3,6 @@ package ocr
 import (
 	"context"
 	"net/http"
-	"ztp/internal/domain"
 	e "ztp/internal/error"
 	document_ml "ztp/internal/grpc"
 	"ztp/internal/handlers/job"
@@ -22,9 +21,9 @@ type OcrServiceImpl struct {
 	jobService job.JobCreateService
 }
 
-func NewOcrService(repo *repository.Repository) *OcrServiceImpl {
+func NewOcrService(repo *repository.Repository, schedulerGrpcAddr string) *OcrServiceImpl {
 	return &OcrServiceImpl{
-		ocrGrpc:    document_ml.NewOcrService(),
+		ocrGrpc:    document_ml.NewOcrService(schedulerGrpcAddr),
 		jobService: job.NewJobCreateService(repo),
 	}
 }
@@ -36,11 +35,12 @@ func (o *OcrServiceImpl) HandleDetectDocumentText(w http.ResponseWriter, r *http
 		e.HandleAPIError(err, "invalid document identifier", w, r)
 		return
 	}
-	job_id, err := o.jobService.CreateJob(ctx, domain.JobStatusCreated, document_id)
-	if err != nil {
-		e.HandleAPIError(err, "could not schedule job", w, r)
-		return
-	}
+	job_id := uuid.New()
+	// job_id, err := o.jobService.CreateJob(ctx, domain.JobStatusCreated, document_id)
+	// if err != nil {
+	// 	e.HandleAPIError(err, "could not schedule job", w, r)
+	// 	return
+	// }
 	err = o.ocrGrpc.DetectDocumentText(ctx, document_id, job_id)
 	if err != nil {
 		e.HandleAPIError(err, "failed to schedule detect document text", w, r)

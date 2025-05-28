@@ -1,8 +1,11 @@
-from server.server import serve
+from worker.worker import Worker
+from worker.config import Config
 
 
 def main():
-    serve("[::]:50051")
+    config = Config()
+    worker = Worker(config)
+    worker.run()
 
 
 if __name__ == "__main__":

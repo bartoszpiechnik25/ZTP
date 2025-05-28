@@ -10,8 +10,8 @@ service DocumentClassifierService {
 
 message ClassifyDocumentRequest {
   string document_id = 1;
-  string job_id=2;
-  bytes image = 3;
+  string job_id = 2;
+  string image_url = 3;
 }
 
 message ClassifyDocumentResponse {}
