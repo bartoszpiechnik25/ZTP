@@ -24,14 +24,10 @@
     "noUncheckedSideEffectImports": true,
 
     /* Custom */
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@assets/*": ["./src/shared/assets/*"],
-      "@cmp/*": ["./src/shared/cmp/*"],
-      "@stores/*": ["./src/shared/stores/*"],
-      "@use/*": ["./src/shared/use/*"]
     },
-    "baseUrl": ".",
   },
   "include": ["src"]
 }
