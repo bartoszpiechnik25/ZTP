@@ -22,8 +22,10 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
-      // Disable the unicorn rules
+      /* Disable the unicorn rules */
       "unicorn/prevent-abbreviations": "off",
+      "unicorn/prefer-node-protocol": "off",
+      "unicorn/no-keyword-prefix": "off",
       // Disable unicorn/filename-case for specific file, force pascalCase for React components
       "unicorn/filename-case": ["error", { case: "pascalCase", ignore: ["index.tsx", "main.tsx", "^.+\.ts$"] }],
     },
