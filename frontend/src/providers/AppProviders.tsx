@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/shared/providers/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import type { ReactNode } from "react";
 
 interface AppProvidersProps {
