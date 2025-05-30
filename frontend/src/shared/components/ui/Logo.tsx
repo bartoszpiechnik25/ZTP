@@ -1,15 +1,15 @@
-import type { LogoSize } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import type { LogoSize } from "@/shared/types/logo";
+import { cn } from "@/shared/utils/shadcn";
 import { Cat } from "lucide-react";
 
 interface LogoProps {
-  className?: string;
+  containerClassName?: string;
   size?: LogoSize;
   textClassName?: string;
   text?: string;
 }
 
-export function Logo({ className, size = "lg", textClassName, text = "atDoc" }: LogoProps) {
+export function Logo({ containerClassName, textClassName, size = "lg", text = "atDoc" }: LogoProps) {
   // Size configuration map for icon and text
   const sizeConfig = {
     xs: { icon: 20, text: "text-lg" },
@@ -23,8 +23,8 @@ export function Logo({ className, size = "lg", textClassName, text = "atDoc" }: 
   const { icon: iconSize, text: textSize } = sizeConfig[size];
 
   return (
-    <div className={cn("flex flex-row items-center", className)}>
-      <Cat size={iconSize} className="shrink-0" />
+    <div className={cn("flex flex-1 flex-row justify-center", containerClassName)}>
+      <Cat size={iconSize} />
       <div className={cn(textSize, textClassName)}>{text}</div>
     </div>
   );
