@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/components/ui/DropdownMenu";
 import { Sun, Moon } from "lucide-react";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "@/app/providers/ThemeProvider";
 import { Lead } from "@/shared/components/ui/typography/Paragraph";
 import {
   Menubar,
