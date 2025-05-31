@@ -1,7 +1,7 @@
 import { useState } from "react";
 import todosApi from "@/features/home/api/todosApi";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Todo } from "@/features/home/types/types";
+import type { Todo } from "@/features/home/types";
 
 export const useTodos = (initialPage = 1, initialPageSize = 10) => {
   const queryClient = useQueryClient();

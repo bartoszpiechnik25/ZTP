@@ -1,9 +1,4 @@
-import type {
-  TodoSchema,
-  CreateTodoSchema,
-  UpdateTodoSchema,
-  PaginatedTodosSchema,
-} from "@/features/home/types/schemas";
+import type { TodoSchema, CreateTodoSchema, UpdateTodoSchema, PaginatedTodosSchema } from "@/features/home/schemas";
 import type z from "zod";
 
 // TypeScript types derived from the schemas

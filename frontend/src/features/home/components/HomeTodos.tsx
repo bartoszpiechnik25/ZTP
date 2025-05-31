@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTodos } from "../hooks/useTodos";
 import { useTodosStore } from "../store/todosStore";
-import type { Filter } from "@/features/home/types/types";
+import type { Filter } from "@/features/home/types";
 import LoadingSpinner from "@/shared/components/LoadingSpinner";
 import { Blockquote } from "@/shared/components/ui/typography/Blockquote";
 import { Button } from "@/shared/components/ui/Button";
@@ -91,7 +91,7 @@ const HomeTodos = () => {
                     <span style={{ textDecoration: todo.completed ? "line-through" : "none" }}>{todo.title}</span>
                   </div>
                   <div className="flex gap-2 items-center">
-                    <Small>{new Date(todo.createdAt).toLocaleDateString()}</Small>
+                    {/* <Small>{new Date(todo.createdAt).toLocaleDateString()}</Small> */}
                     <Button onClick={() => deleteTodo(todo.id)} size="sm" variant="destructive">
                       Delete
                     </Button>

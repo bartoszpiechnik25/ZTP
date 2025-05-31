@@ -1,4 +1,4 @@
-import type { Filter } from "@/features/home/types/types";
+import type { Filter } from "@/features/home/types";
 import { create } from "zustand";
 
 type TodosStore = {
