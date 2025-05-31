@@ -1,6 +1,6 @@
-import api from "@/app/api/axios";
-import { PaginatedTodosSchema, CreateTodoSchema, TodoSchema, UpdateTodoSchema } from "@/features/home/types/schemas";
-import type { CreateTodo, Todo } from "@/features/home/types/types";
+import api from "@/app/api";
+import { PaginatedTodosSchema, CreateTodoSchema, TodoSchema, UpdateTodoSchema } from "@/features/home/schemas";
+import type { CreateTodo, Todo } from "@/features/home/types";
 import validateResponse from "@/shared/utils/validateResponse";
 
 const todosApi = {
