@@ -12,6 +12,7 @@ const api: AxiosInstance = axios.create({
 });
 
 // TODO: Implement authentication and token management
+
 // // Add auth token to requests
 // api.interceptors.request.use((config) => {
 //   const token = useAuthStore.getState().token;
