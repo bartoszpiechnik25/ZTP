@@ -1,6 +1,9 @@
 package models
 
-import "net/http"
+import (
+	"net/http"
+	"ztp/internal/repository"
+)
 
 type GetUserByIdResponse struct {
 	*User
@@ -15,5 +18,29 @@ type LoginResponse struct {
 }
 
 func (resp *LoginResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+type GetDocumentCategoriesResponse struct {
+	Categories []repository.DocumentCategory `json:"categories"`
+}
+
+func (resp *GetDocumentCategoriesResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+type GetDocumentTypesResponse struct {
+	Types []repository.DocumentType`json:"types"`
+}
+
+func (resp *GetDocumentTypesResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+type GetAllUserDocumentsResponse struct {
+	Documents []repository.GetAllUserDocumentsRow `json:"documents"`
+}
+
+func (resp *GetAllUserDocumentsResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }

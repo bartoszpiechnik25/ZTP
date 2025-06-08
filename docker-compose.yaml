@@ -43,11 +43,22 @@ services:
         condition: service_completed_successfully
       scheduler:
         condition: service_started
+  initializer:
+    container_name: initializer
+    build:
+      context: ./backend/deployment/initializer
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+      server:
+        condition: service_started
   postgres:
     image: postgres:17.4
     container_name: ztp-db
     restart: always
     env_file: ".env"
+    ports:
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - ztp_data:/var/lib/postgresql/data
     healthcheck:
@@ -64,7 +75,7 @@ services:
     volumes:
       - localstack_data:/var/lib/localstack
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - ./backend/deployment/scripts/create_aws_services.sh:/etc/localstack/init/ready.d/create_aws_services.sh
+      - ./backend/deployment/scripts/aws/create_aws_services.sh:/etc/localstack/init/ready.d/create_aws_services.sh
 volumes:
   ztp_data:
   localstack_data:

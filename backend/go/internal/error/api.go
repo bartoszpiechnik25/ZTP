@@ -40,6 +40,10 @@ func HandleAPIError(err error, message string, w http.ResponseWriter, r *http.Re
 		statusCode = http.StatusNotFound
 	} else if errors.Is(err, ErrAlreadyExsits) {
 		statusCode = http.StatusConflict
+	} else if errors.Is(err, ErrForbidden) {
+		statusCode = http.StatusForbidden
+	} else if errors.Is(err, ErrUnauthorized) {
+		statusCode = http.StatusUnauthorized
 	} else {
 		statusCode = http.StatusInternalServerError
 	}

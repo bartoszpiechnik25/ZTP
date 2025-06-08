@@ -3,7 +3,11 @@
 # Fail on error
 set -e
 
-API_URL="http://localhost:2137/user/create"
+API_URL="http://server:2137/user/create"
+
+echo "Waiting for server to start"
+
+sleep 3
 
 echo "Creating users..."
 

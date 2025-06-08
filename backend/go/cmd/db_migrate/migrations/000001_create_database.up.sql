@@ -43,11 +43,18 @@ CREATE TABLE IF NOT EXISTS document_tags (
 CREATE TABLE IF NOT EXISTS documents (
     id uuid PRIMARY KEY,
     title text,
-    url text NOT NULL,
     notes text,
-    ocr_content text NULL,
     document_type_id uuid NOT NULL REFERENCES document_types (id),
     document_category_id uuid NOT NULL REFERENCES document_categories (id)
+);
+
+CREATE TABLE IF NOT EXISTS document_pages (
+    id uuid PRIMARY KEY,
+    page_number smallint NOT NULL,
+    content_type text,
+    data bytea,
+    ocr_content text,
+    document_id uuid NOT NULL REFERENCES documents (id)
 );
 
 -- Create document versions table
@@ -55,7 +62,6 @@ CREATE TABLE IF NOT EXISTS document_versions (
     id uuid PRIMARY KEY,
     document_id uuid NOT NULL REFERENCES documents (id),
     version_number int NOT NULL,
-    file_url text NOT NULL,
     created_at timestamptz NOT NULL
 );
 
