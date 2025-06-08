@@ -58,9 +58,7 @@ func (ns NullUserRole) Value() (driver.Value, error) {
 type Document struct {
 	ID                 uuid.UUID `json:"id"`
 	Title              *string   `json:"title"`
-	Url                string    `json:"url"`
 	Notes              *string   `json:"notes"`
-	OcrContent         *string   `json:"ocr_content"`
 	DocumentTypeID     uuid.UUID `json:"document_type_id"`
 	DocumentCategoryID uuid.UUID `json:"document_category_id"`
 }
@@ -86,6 +84,15 @@ type DocumentClassification struct {
 	ClassifiedAt         time.Time `json:"classified_at"`
 }
 
+type DocumentPage struct {
+	ID          uuid.UUID `json:"id"`
+	PageNumber  int16     `json:"page_number"`
+	ContentType *string   `json:"content_type"`
+	Data        []byte    `json:"data"`
+	OcrContent  *string   `json:"ocr_content"`
+	DocumentID  uuid.UUID `json:"document_id"`
+}
+
 type DocumentTag struct {
 	ID   uuid.UUID `json:"id"`
 	Name string    `json:"name"`
@@ -105,7 +112,6 @@ type DocumentVersion struct {
 	ID            uuid.UUID `json:"id"`
 	DocumentID    uuid.UUID `json:"document_id"`
 	VersionNumber int32     `json:"version_number"`
-	FileUrl       string    `json:"file_url"`
 	CreatedAt     time.Time `json:"created_at"`
 }
 

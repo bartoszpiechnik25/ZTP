@@ -2,6 +2,7 @@ package server
 
 import (
 	"ztp/internal/config"
+	"ztp/internal/handlers/document"
 	"ztp/internal/handlers/ocr"
 	"ztp/internal/handlers/user"
 	"ztp/internal/repository"
@@ -18,6 +19,7 @@ type Server struct {
 	Router     *chi.Mux
 	jwtAuth    *jwtauth.JWTAuth
 	users      *user.UserService
+	documents  *document.DocumentService
 	ocrService *ocr.OcrServiceImpl
 	repository *repository.Repository
 }
@@ -25,6 +27,7 @@ type Server struct {
 func New(config *config.Config, pool *pgxpool.Pool) *Server {
 	router := chi.NewMux()
 	repo := repository.NewRepository(config.DbConfig, pool)
+	documentService := document.New(repo)
 	auth := jwtauth.New(config.ServerConfig.JwtAlgo, []byte(config.ServerConfig.JwtSecretKey), nil)
 	handlers := user.NewUserService(repo, auth)
 	ocrService := ocr.NewOcrService(repo, config.GrpcConfig.SchedulerGrpcAddr)
@@ -36,6 +39,7 @@ func New(config *config.Config, pool *pgxpool.Pool) *Server {
 		repository: repo,
 		users:      handlers,
 		ocrService: ocrService,
+		documents:  documentService,
 		jwtAuth:    auth,
 	}
 }
@@ -47,12 +51,16 @@ func (s *Server) ConfigureHandlers() {
 		r.Use(jwtauth.Authenticator(s.jwtAuth))
 		r.Get("/user/{username}", s.users.HandleGetByUsername)
 		r.Get("/user", s.users.HandleGetByEmail)
+		r.Post("/document/ocr/{id}", s.ocrService.HandleDetectDocumentText)
+		r.Post("/document", s.documents.HandleCreateDocument)
+		r.Get("/document/types", s.documents.HandleGetDocumentTypes)
+		r.Get("/document/categories", s.documents.HandleGetDocumentCategories)
+		r.Get("/user/documents", s.documents.HandleGetAllUserDocuments)
 	})
 
 	// Public routes
 	s.Router.Post("/user/create", s.users.HandleCreateUser)
 	s.Router.Post("/login", s.users.HandleLogin)
-	s.Router.Post("/document/ocr/{id}", s.ocrService.HandleDetectDocumentText)
 }
 
 func configureRouter(router *chi.Mux) {

@@ -3,9 +3,9 @@ package models
 import (
 	"encoding/json"
 	"io"
+	"ztp/internal/repository"
 
 	"github.com/go-playground/validator/v10"
-	"ztp/internal/repository"
 )
 
 func MapRequestBody[T any](body io.ReadCloser) (*T, error) {
@@ -32,5 +32,23 @@ func MapUserToGetUserByIdResponse(user *repository.User) *GetUserByIdResponse {
 			Email:       user.Email,
 			Role:        UserRole(user.UserRole),
 		},
+	}
+}
+
+func MapToGetDocumentTypesResponse(documentTypes []repository.DocumentType) *GetDocumentTypesResponse {
+	return &GetDocumentTypesResponse{
+		Types: documentTypes,
+	}
+}
+
+func MapToGetDocumentCategoriesResponse(documentCategories []repository.DocumentCategory) *GetDocumentCategoriesResponse {
+	return &GetDocumentCategoriesResponse{
+		Categories: documentCategories,
+	}
+}
+
+func MapToGetAllUserDocumentsResponse(documents []repository.GetAllUserDocumentsRow) *GetAllUserDocumentsResponse {
+	return &GetAllUserDocumentsResponse{
+		Documents: documents,
 	}
 }

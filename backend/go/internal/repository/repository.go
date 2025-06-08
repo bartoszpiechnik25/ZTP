@@ -15,7 +15,16 @@ type Store interface {
 	GetUserByID(ctx context.Context, user_id uuid.UUID) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	UserExists(ctx context.Context, username string) (UserExistsRow, error)
+	CreateDocument(ctx context.Context, arg CreateDocumentParams) error
+	CreateDocumentPage(ctx context.Context, arg CreateDocumentPageParams) error
+	GetDocumentCategory(ctx context.Context, name string) (DocumentCategory, error)
+	GetDocumentType(ctx context.Context, name string) (DocumentType, error)
+	GetDocumentTypes(ctx context.Context) ([]DocumentType, error)
+	GetDocumentCategories(ctx context.Context) ([]DocumentCategory, error)
+	CreateUserDocument(ctx context.Context, params CreateUserDocumentParams) error
+	GetAllUserDocuments(ctx context.Context, userID uuid.UUID) ([]GetAllUserDocumentsRow, error)
 }
+
 type Repository struct {
 	Queries Store
 }
