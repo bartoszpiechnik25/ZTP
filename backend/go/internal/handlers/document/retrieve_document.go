@@ -15,12 +15,12 @@ type DocumentRetrieverServiceImpl struct {
 }
 
 func NewDocumentRetrieverService(r *repository.Repository) DocumentRetrieverService {
-	return &DocumentCreateServiceImpl{
+	return &DocumentRetrieverServiceImpl{
 		documentStore: r.Queries,
 	}
 }
 
-func (drs *DocumentCreateServiceImpl) GetDocumentTypes(ctx context.Context) ([]repository.DocumentType, error) {
+func (drs *DocumentRetrieverServiceImpl) GetDocumentTypes(ctx context.Context) ([]repository.DocumentType, error) {
 	documentTypes, err := drs.documentStore.GetDocumentTypes(ctx)
 	if err != nil {
 		logrus.Error(err)
@@ -29,7 +29,7 @@ func (drs *DocumentCreateServiceImpl) GetDocumentTypes(ctx context.Context) ([]r
 	return documentTypes, nil
 }
 
-func (drs *DocumentCreateServiceImpl) GetDocumentCategories(ctx context.Context) ([]repository.DocumentCategory, error) {
+func (drs *DocumentRetrieverServiceImpl) GetDocumentCategories(ctx context.Context) ([]repository.DocumentCategory, error) {
 	documentCategories, err := drs.documentStore.GetDocumentCategories(ctx)
 	if err != nil {
 		logrus.Error(err)
@@ -38,7 +38,7 @@ func (drs *DocumentCreateServiceImpl) GetDocumentCategories(ctx context.Context)
 	return documentCategories, nil
 }
 
-func (drs *DocumentCreateServiceImpl) GetAllUserDocuments(ctx context.Context, userId uuid.UUID) ([]repository.GetAllUserDocumentsRow, error) {
+func (drs *DocumentRetrieverServiceImpl) GetAllUserDocuments(ctx context.Context, userId uuid.UUID) ([]repository.GetAllUserDocumentsRow, error) {
 	documents, err := drs.documentStore.GetAllUserDocuments(ctx, userId)
 	if err != nil {
 		logrus.Error(err)
