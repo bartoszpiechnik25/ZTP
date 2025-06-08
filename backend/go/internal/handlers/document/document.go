@@ -51,7 +51,7 @@ func (ds *DocumentService) HandleGetDocumentTypes(w http.ResponseWriter, r *http
 	ctx := r.Context()
 	documentTypes, err := ds.retrieveDocuments.GetDocumentTypes(ctx)
 	if err != nil {
-		e.HandleDbError(err)
+		e.HandleAPIError(err, "could note get document types", w, r)
 		return
 	}
 	_ = render.Render(w, r, models.MapToGetDocumentTypesResponse(documentTypes))
@@ -63,7 +63,7 @@ func (ds *DocumentService) HandleGetDocumentCategories(w http.ResponseWriter, r 
 	ctx := r.Context()
 	documentCategories, err := ds.retrieveDocuments.GetDocumentCategories(ctx)
 	if err != nil {
-		e.HandleDbError(err)
+		e.HandleAPIError(err, "could note get document categories", w, r)
 		return
 	}
 	_ = render.Render(w, r, models.MapToGetDocumentCategoriesResponse(documentCategories))
