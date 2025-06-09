@@ -24,12 +24,18 @@ interface NavigationBarProps {
 
 // Wrapper component for MenubarTrigger with Link
 const LinkMenubarTrigger = ({ to, label, onClick }: { to?: string; label: string; onClick?: () => void }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (to) {
+      e.preventDefault();
+      window.location.href = to; // Force full page reload
+    }
+    if (onClick) onClick();
+  };
+
   if (to) {
     return (
-      <MenubarTrigger asChild className="cursor-pointer">
-        <Link to={to} className="w-full h-full block">
-          {label}
-        </Link>
+      <MenubarTrigger asChild className="cursor-pointer" onClick={handleClick}>
+        <div className="w-full h-full block">{label}</div>
       </MenubarTrigger>
     );
   }
@@ -47,7 +53,7 @@ const RenderMenuItem = ({ item }: { item: MenuItem }) => {
   if (item.children && item.children.length > 0) {
     return (
       <MenubarMenu>
-        <MenubarTrigger>{item.label}</MenubarTrigger>
+        <MenubarTrigger className="cursor-pointer">{item.label}</MenubarTrigger>
         <MenubarContent>
           {item.children.map((child, index) => {
             if (child === "separator") {
@@ -55,7 +61,7 @@ const RenderMenuItem = ({ item }: { item: MenuItem }) => {
             }
 
             return (
-              <MenubarItem key={`${child.label}-${index}`} asChild={!!child.to}>
+              <MenubarItem key={`${child.label}-${index}`} asChild={!!child.to} className="cursor-pointer">
                 {child.to ? (
                   <Link to={child.to} className="w-full h-full block" onClick={child.onClick}>
                     {child.label}

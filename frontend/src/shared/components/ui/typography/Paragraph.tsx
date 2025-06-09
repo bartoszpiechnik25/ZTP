@@ -7,7 +7,7 @@ interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {
 
 export function P({ children, className, ...props }: ParagraphProps) {
   return (
-    <p className={cn("leading-7 [&:not(:first-child)]:mt-6", className)} {...props}>
+    <p className={cn("leading-7", className)} {...props}>
       {children}
     </p>
   );
