@@ -86,13 +86,11 @@ export const formatApiError = (error: any, defaultMessage: string): ApiError => 
       message: "Network error. Please check your connection",
       code: "NETWORK_ERROR",
     };
-  } else {
-    // Request setup error
-    return {
-      message: error.message || defaultMessage,
-      code: "REQUEST_ERROR",
-    };
   }
+  return {
+    message: error.message || defaultMessage,
+    code: "REQUEST_ERROR",
+  };
 };
 
 export default api;

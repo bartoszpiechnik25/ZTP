@@ -22,7 +22,7 @@ describe("validateResponse", () => {
     };
 
     // Act
-    const result = await validateResponse(schema, response);
+    const result = validateResponse(schema, response);
 
     // Assert
     expect(result).toEqual(response.data);
@@ -42,7 +42,7 @@ describe("validateResponse", () => {
     };
 
     // Act & Assert
-    await expect(validateResponse(schema, response)).rejects.toThrow("Invalid data received from the server.");
+    expect(() => validateResponse(schema, response)).toThrow("Invalid data received from the server.");
     expect(console.error).toHaveBeenCalledWith("Validation error:", expect.any(Array));
   });
 
@@ -59,7 +59,7 @@ describe("validateResponse", () => {
     });
 
     // Act & Assert
-    await expect(validateResponse(schema, { data: {} })).rejects.toBe(originalError);
+    expect(() => validateResponse(schema, { data: {} })).toThrow(originalError);
   });
 
   it("should handle nested object validation", async () => {
@@ -85,7 +85,7 @@ describe("validateResponse", () => {
     };
 
     // Act
-    const result = await validateResponse(schema, response);
+    const result = validateResponse(schema, response);
 
     // Assert
     expect(result).toEqual(response.data);
