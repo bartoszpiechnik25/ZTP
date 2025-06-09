@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect } from "react";
-import { useThemeStore } from "@/shared/store/useThemeStore";
+import { useAppStore } from "@/shared/store/useAppStore";
 import type { Theme } from "@/shared/types/theme";
 
 type ThemeProviderProps = {
@@ -19,7 +19,7 @@ const initialState: ThemeProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  const { theme, setTheme } = useThemeStore();
+  const { theme, setTheme } = useAppStore();
 
   useEffect(() => {
     const root = window.document.documentElement;

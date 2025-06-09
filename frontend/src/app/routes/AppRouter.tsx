@@ -1,13 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import HomePage from "@/features/home/HomePage";
 import AboutPage from "@/features/about/AboutPage";
-import SignInPage from "@/features/auth/SignInPage";
-import SignUpPage from "@/features/auth/SignUpPage";
-import AuthLayout from "@/layouts/AuthLayout";
-import DocumentsLayout from "@/layouts/DocumentsLayout";
+import SignInForm from "@/features/auth/components/SignInForm";
+import SignUpForm from "@/features/auth/components/SignUpForm";
+import AuthLayout from "@/features/auth/AuthLayout";
+import DocumentsLayout from "@/features/documents/DocumentsLayout";
 import DocumentsPage from "@/features/documents/DocumentsPage";
 import DocumentDetailPage from "@/features/documents/DocumentDetailPage";
 import NotFoundPage from "@/features/notFound/NotFoundPage";
+import ForgotPasswordForm from "@/features/auth/components/ForgotPasswordForm";
+import ForgotPasswordSuccess from "@/features/auth/components/ForgotPasswordSuccess";
 
 const AppRouter = () => {
   return (
@@ -17,8 +19,10 @@ const AppRouter = () => {
         <Route path="about" element={<AboutPage />} />
 
         <Route element={<AuthLayout />}>
-          <Route path="sign-in" element={<SignInPage />} />
-          <Route path="sign-up" element={<SignUpPage />} />
+          <Route path="sign-in" element={<SignInForm />} />
+          <Route path="sign-up" element={<SignUpForm />} />
+          <Route path="forgot-password" element={<ForgotPasswordForm />} />
+          <Route path="forgot-password/success" element={<ForgotPasswordSuccess />} />
         </Route>
 
         <Route path="documents" element={<DocumentsLayout />}>

@@ -1,7 +1,7 @@
 import { z, ZodError } from "zod";
 
 // Utility function to validate API responses
-async function validateResponse<T>(schema: z.ZodSchema<T>, response: { data: unknown }): Promise<T> {
+function validateResponse<T>(schema: z.ZodSchema<T>, response: { data: unknown }): T {
   try {
     return schema.parse(response.data);
   } catch (error) {
