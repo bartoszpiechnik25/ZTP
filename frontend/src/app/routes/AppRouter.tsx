@@ -15,12 +15,14 @@ import HelpPage from "@/features/help/HelpPage";
 import NotFoundPage from "@/features/notFound/NotFoundPage";
 import ForgotPasswordForm from "@/features/auth/components/ForgotPasswordForm";
 import ForgotPasswordSuccess from "@/features/auth/components/ForgotPasswordSuccess";
+import { ProtectedRoute } from "@/app/routes/ProtectedRoute";
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route index element={<HomePage />} />
+        {/* TODO: Remove it later */}
         <Route path="test" element={<ResearchPage />} />
 
         <Route element={<AuthLayout />}>
@@ -30,7 +32,14 @@ const AppRouter = () => {
           <Route path="forgot-password/success" element={<ForgotPasswordSuccess />} />
         </Route>
 
-        <Route path="app" element={<DashboardLayout />}>
+        <Route
+          path="app"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<DashboardPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="documents">

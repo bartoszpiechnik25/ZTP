@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance } from "axios";
+import axios, { isAxiosError, type AxiosInstance } from "axios";
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
 
@@ -26,51 +26,17 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  (response) => response
-  // TODO: Consider handling response errors globally
-  // async (error) => {
-  //   console.error("[api] Response error:", error);
+  (response) => response,
+  async (error) => {
+    if (isAxiosError(error) && error.response?.status === 401) {
+      console.error("Unauthorized. Please log in again.");
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("app-storage");
+      window.location.href = "/sign-in";
+    }
 
-  //   const statusCode = error.response?.status;
-  //   switch (statusCode) {
-  //     case 400: {
-  //       console.error("Bad request. Please check your input.");
-  //       break;
-  //     }
-  //     case 401: {
-  //       console.error("Unauthorized. Please log in again.");
-  //       localStorage.removeItem("authToken");
-  //       window.location.href = "/sign-in";
-  //       break;
-  //     }
-  //     case 403: {
-  //       console.error("Access forbidden. You do not have permission to access this resource.");
-  //       break;
-  //     }
-  //     case 404: {
-  //       console.error("Resource not found. Please check the URL.");
-  //       break;
-  //     }
-  //     case 409: {
-  //       console.error(
-  //         "Conflict error. The request could not be completed due to a conflict with the current state of the resource."
-  //       );
-  //       break;
-  //     }
-  //     case 429: {
-  //       console.error("Too many requests. Please try again later.");
-  //       break;
-  //     }
-  //     case 500: {
-  //       console.error("Internal server error. Please try again later.");
-  //       break;
-  //     }
-  //     default: {
-  //       console.error(`Unexpected error: ${error.message}`);
-  //     }
-  //   }
-  //   throw error;
-  // }
+    throw error;
+  }
 );
 
 export default api;
