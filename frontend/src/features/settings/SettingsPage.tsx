@@ -4,7 +4,7 @@ import { Badge } from "@/shared/components/ui/Badge";
 import { Label } from "@/shared/components/ui/Label";
 import { Separator } from "@/shared/components/ui/Separator";
 import { Bell, Lock, Palette, Database, Shield, Globe } from "lucide-react";
-import { Switch } from "@/shared/components/ui/switch";
+import { Switch } from "@/shared/components/ui/Switch";
 
 export default function SettingsPage() {
   return (

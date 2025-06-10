@@ -1,7 +1,7 @@
 import aiStars from "@/assets/svg/ai-stars.svg";
 import { useTheme } from "@/app/providers/ThemeProvider";
 import { cn } from "@/shared/utils/shadcn";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/Tooltip";
 
 const AiTooltip = ({ iconClassName }: { iconClassName?: string }) => {
   const { theme } = useTheme();

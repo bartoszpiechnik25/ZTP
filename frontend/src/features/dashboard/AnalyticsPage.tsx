@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/Card";
 import { Badge } from "@/shared/components/ui/Badge";
 import { BarChart3, TrendingUp, TrendingDown, FileText, Upload, Download, Calendar } from "lucide-react";
-import { Progress } from "@/shared/components/ui/progress";
+import { Progress } from "@/shared/components/ui/Progress";
 
 // Mock analytics data
 const mockAnalytics = {

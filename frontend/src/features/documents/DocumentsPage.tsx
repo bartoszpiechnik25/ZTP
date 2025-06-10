@@ -4,7 +4,7 @@ import { Button } from "@/shared/components/ui/Button";
 import { Badge } from "@/shared/components/ui/Badge";
 import { Grid, List, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/Tabs";
 import AddDocumentButton from "@/features/documents/components/AddDocumentButton";
 import AddDocumentModal from "@/features/documents/components/AddDocumentModal";
 import ConfirmDeleteModal from "@/features/documents/components/ConfirmDeleteModal";
