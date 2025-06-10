@@ -4,7 +4,6 @@ import ResearchPage from "@/features/research/ResearchPage";
 import SignInForm from "@/features/auth/components/SignInForm";
 import SignUpForm from "@/features/auth/components/SignUpForm";
 import AuthLayout from "@/features/auth/AuthLayout";
-import DocumentsLayout from "@/features/documents/DocumentsLayout";
 import DocumentsPage from "@/features/documents/DocumentsPage";
 import DocumentDetailPage from "@/features/documents/DocumentDetailPage";
 import DashboardLayout from "@/features/dashboard/DashboardLayout";
@@ -31,26 +30,16 @@ const AppRouter = () => {
           <Route path="forgot-password/success" element={<ForgotPasswordSuccess />} />
         </Route>
 
-        <Route path="dashboard" element={<DashboardLayout />}>
+        <Route path="app" element={<DashboardLayout />}>
           <Route index element={<DashboardPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
-        </Route>
-
-        <Route path="profile" element={<DashboardLayout />}>
-          <Route index element={<ProfilePage />} />
-        </Route>
-
-        <Route path="settings" element={<DashboardLayout />}>
-          <Route index element={<SettingsPage />} />
-        </Route>
-
-        <Route path="help" element={<DashboardLayout />}>
-          <Route index element={<HelpPage />} />
-        </Route>
-
-        <Route path="documents" element={<DocumentsLayout />}>
-          <Route index element={<DocumentsPage />} />
-          <Route path=":id" element={<DocumentDetailPage />} />
+          <Route path="documents">
+            <Route index element={<DocumentsPage />} />
+            <Route path=":id" element={<DocumentDetailPage />} />
+          </Route>
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="help" element={<HelpPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

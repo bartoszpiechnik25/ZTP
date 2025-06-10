@@ -16,7 +16,7 @@ export const useAuth = () => {
       setAuth(data.user);
       localStorage.setItem("authToken", data.token);
       queryClient.setQueryData(["user"], data.user);
-      navigate("/dashboard");
+      navigate("/app");
     },
   });
 

@@ -6,21 +6,27 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/DropdownMenu";
 import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
-import ThemeToggler from "@/shared/components/ThemeToggler";
 import { Separator } from "@/shared/components/ui/Separator";
-import { LogOut, Settings, User } from "lucide-react";
+import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
 import { SidebarTrigger } from "@/shared/components/ui/Sidebar";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { useTheme } from "@/app/providers/ThemeProvider";
+import { P } from "@/shared/components/ui/typography/Paragraph";
 
 // TODO: Refactor this component
 export function DashboardHeader() {
   const navigate = useNavigate();
   const { user, clearAuth } = useAppStore();
   const isMobile = useIsMobile();
+  const { setTheme } = useTheme();
 
   const handleSignOut = () => {
     clearAuth();
@@ -50,9 +56,9 @@ export function DashboardHeader() {
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <ThemeToggler className="h-10 w-10" />
-
+      {/* Header side items */}
+      <div className="flex items-center gap-6">
+        <P>Hello, {mockUser.name}!</P>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-12 w-12 rounded-full">
@@ -70,15 +76,36 @@ export function DashboardHeader() {
               <p className="text-xs leading-none text-muted-foreground">{mockUser.email}</p>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate("/profile")}>
+            <DropdownMenuItem onClick={() => navigate("/app/profile")}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate("/settings")}>
+            <DropdownMenuItem onClick={() => navigate("/app/settings")}>
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="ml-4">Toggle theme</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => setTheme("light")}>
+                    Light
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => setTheme("dark")}>
+                    Dark
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => setTheme("system")}>
+                    System
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuSeparator />
+
             <DropdownMenuItem onClick={handleSignOut}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>

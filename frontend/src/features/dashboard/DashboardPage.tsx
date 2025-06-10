@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/Card";
 import { Button } from "@/shared/components/ui/Button";
-import { FileText, Upload, Search, TrendingUp, Clock, Archive, MoreHorizontal } from "lucide-react";
+import { FileText, Upload, TrendingUp, Clock, Archive, MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Badge } from "@/shared/components/ui/Badge";
 
@@ -47,30 +47,6 @@ const mockRecentDocuments = [
   },
 ];
 
-const mockQuickActions = [
-  {
-    title: "Upload Document",
-    description: "Add new documents to your collection",
-    icon: Upload,
-    action: "/documents/upload",
-    variant: "default" as const,
-  },
-  {
-    title: "Search Documents",
-    description: "Find documents quickly",
-    icon: Search,
-    action: "/documents/search",
-    variant: "outline" as const,
-  },
-  {
-    title: "View Analytics",
-    description: "See document insights",
-    icon: TrendingUp,
-    action: "/dashboard/analytics",
-    variant: "outline" as const,
-  },
-];
-
 // Function to get status color classes
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -100,30 +76,8 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">Welcome back! Here's an overview of your document management system.</p>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid gap-4 md:grid-cols-3">
-        {mockQuickActions.map((action) => {
-          const Icon = action.icon;
-          return (
-            <Card
-              key={action.title}
-              className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => navigate(action.action)}
-            >
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-2">
-                  <Icon className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-lg">{action.title}</CardTitle>
-                </div>
-                <CardDescription>{action.description}</CardDescription>
-              </CardHeader>
-            </Card>
-          );
-        })}
-      </div>
-
       {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
@@ -167,6 +121,22 @@ export default function DashboardPage() {
             <p className="text-xs text-muted-foreground">of 10 GB limit</p>
           </CardContent>
         </Card>
+
+        <Card
+          key="view-analytics"
+          className="cursor-pointer hover:shadow-md transition-shadow"
+          onClick={() => navigate("/app/analytics")}
+        >
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <CardTitle className="text-lg">View Analytics</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>See document insights</CardDescription>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Recent Documents */}
@@ -177,7 +147,7 @@ export default function DashboardPage() {
               <CardTitle>Recent Documents</CardTitle>
               <CardDescription>Your latest uploaded and processed documents</CardDescription>
             </div>
-            <Button variant="outline" onClick={() => navigate("/documents")}>
+            <Button variant="outline" onClick={() => navigate("/app/documents")}>
               View All
             </Button>
           </div>

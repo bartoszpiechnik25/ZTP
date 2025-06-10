@@ -13,7 +13,7 @@ import {
 } from "@/shared/components/ui/Sidebar";
 import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
 import { Separator } from "@/shared/components/ui/Separator";
-import { FileText, Search, Upload, Archive, Settings, HelpCircle, Home, BarChart3, Tags } from "lucide-react";
+import { FileText, Settings, HelpCircle, Home, BarChart3 } from "lucide-react";
 
 // Navigation items
 const navigationItems = [
@@ -22,50 +22,21 @@ const navigationItems = [
     items: [
       {
         title: "Dashboard",
-        url: "/dashboard",
+        url: "/app",
         icon: Home,
         description: "View your dashboard overview",
       },
       {
-        title: "Analytics",
-        url: "/dashboard/analytics",
-        icon: BarChart3,
-        description: "Document analytics and insights",
-      },
-    ],
-  },
-  {
-    title: "Documents",
-    items: [
-      {
-        title: "All Documents",
-        url: "/documents",
+        title: "Documents",
+        url: "/app/documents",
         icon: FileText,
         description: "Browse all your documents",
       },
       {
-        title: "Search",
-        url: "/documents/search",
-        icon: Search,
-        description: "Search through documents",
-      },
-      {
-        title: "Upload",
-        url: "/documents/upload",
-        icon: Upload,
-        description: "Upload new documents",
-      },
-      {
-        title: "Categories",
-        url: "/documents/categories",
-        icon: Tags,
-        description: "Organize by categories",
-      },
-      {
-        title: "Archive",
-        url: "/documents/archive",
-        icon: Archive,
-        description: "Archived documents",
+        title: "Analytics",
+        url: "/app/analytics",
+        icon: BarChart3,
+        description: "Document analytics and insights",
       },
     ],
   },
@@ -74,13 +45,13 @@ const navigationItems = [
     items: [
       {
         title: "Preferences",
-        url: "/settings",
+        url: "/app/settings",
         icon: Settings,
         description: "Account and app settings",
       },
       {
         title: "Help",
-        url: "/help",
+        url: "/app/help",
         icon: HelpCircle,
         description: "Get help and support",
       },
