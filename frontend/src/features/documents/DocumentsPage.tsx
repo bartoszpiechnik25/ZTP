@@ -102,10 +102,6 @@ const mockDocuments: Document[] = [
   },
 ];
 
-const categories = ["All", "Finance", "Technical", "Marketing", "Legal", "HR"];
-const extensions = ["All", "pdf", "docx", "pptx", "xlsx"];
-const statuses = ["All", "processed", "processing", "failed"];
-
 export interface Document {
   id: string;
   title: string;
@@ -121,26 +117,21 @@ export interface Document {
   extension: string;
 }
 
-interface DocumentFormData {
-  title: string;
-  description: string;
-  category: string;
-  tags: string[];
-  files: File[];
-}
-
 export default function DocumentsPage() {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedExtension, setSelectedExtension] = useState("All");
-  const [selectedStatus, setSelectedStatus] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    category: "All",
+    type: "All",
+    extension: "All",
+    status: "All",
+  });
 
   // Filter documents based on search and filters
   const filteredDocuments = mockDocuments.filter((doc) => {
@@ -149,11 +140,12 @@ export default function DocumentsPage() {
       doc.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       doc.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesCategory = selectedCategory === "All" || doc.category === selectedCategory;
-    const matchesExtension = selectedExtension === "All" || doc.extension === selectedExtension;
-    const matchesStatus = selectedStatus === "All" || doc.status === selectedStatus;
+    const matchesCategory = filters.category === "All" || doc.category === filters.category;
+    const matchesType = filters.type === "All" || doc.type === filters.type;
+    const matchesExtension = filters.extension === "All" || doc.extension === filters.extension;
+    const matchesStatus = filters.status === "All" || doc.status === filters.status;
 
-    return matchesSearch && matchesCategory && matchesExtension && matchesStatus;
+    return matchesSearch && matchesCategory && matchesType && matchesExtension && matchesStatus;
   });
 
   // Pagination
@@ -166,23 +158,9 @@ export default function DocumentsPage() {
     setCurrentPage(1);
   }, []);
 
-  const handleFilterChange = useCallback((type: string, value: string) => {
-    switch (type) {
-      case "category": {
-        setSelectedCategory(value);
-        break;
-      }
-      case "extension": {
-        setSelectedExtension(value);
-        break;
-      }
-      case "status": {
-        setSelectedStatus(value);
-        break;
-      }
-    }
-    setCurrentPage(1);
-  }, []);
+  const handleFilterChange = (filterType: string, value: string) => {
+    setFilters((prev) => ({ ...prev, [filterType]: value }));
+  };
 
   const handleDocumentSelect = useCallback((documentId: string, selected: boolean) => {
     setSelectedDocuments((prev) => (selected ? [...prev, documentId] : prev.filter((id) => id !== documentId)));
@@ -215,11 +193,18 @@ export default function DocumentsPage() {
     [navigate]
   );
 
-  const handleAddDocument = useCallback((documentData: DocumentFormData) => {
-    // TODO: Implement add document functionality
-    console.log("Adding document:", documentData);
+  const handleAddDocument = () => {
     setIsAddModalOpen(false);
-  }, []);
+    // Reset filters and search to show new document
+    setSearchQuery("");
+    setFilters({
+      category: "All",
+      type: "All",
+      extension: "All",
+      status: "All",
+    });
+    setCurrentPage(1);
+  };
 
   return (
     <div className="space-y-6">
@@ -248,12 +233,10 @@ export default function DocumentsPage() {
           <div className="space-y-4">
             <SearchBar onSearch={handleSearch} />
             <FilterControls
-              categories={categories}
-              extensions={extensions}
-              statuses={statuses}
-              selectedCategory={selectedCategory}
-              selectedExtension={selectedExtension}
-              selectedStatus={selectedStatus}
+              selectedCategory={filters.category}
+              selectedType={filters.type}
+              selectedExtension={filters.extension}
+              selectedStatus={filters.status}
               onFilterChange={handleFilterChange}
             />
           </div>
@@ -317,12 +300,7 @@ export default function DocumentsPage() {
       </div>
 
       {/* Modals */}
-      <AddDocumentModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onAdd={handleAddDocument}
-        categories={categories.filter((cat) => cat !== "All")}
-      />
+      <AddDocumentModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdd={handleAddDocument} />
 
       <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}

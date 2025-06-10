@@ -3,30 +3,34 @@ import { Badge } from "@/shared/components/ui/Badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/Select";
 import { Filter, X } from "lucide-react";
 import AiTooltip from "@/features/documents/components/AiTooltip";
+import { useDocument } from "@/features/documents/hooks/useDocument";
 
 interface FilterControlsProps {
-  categories: string[];
-  extensions: string[];
-  statuses: string[];
   selectedCategory: string;
+  selectedType: string;
   selectedExtension: string;
   selectedStatus: string;
   onFilterChange: (type: string, value: string) => void;
 }
 
+const extensions = ["All", "pdf", "docx", "xlsx"];
+const statuses = ["All", "pending", "approved", "rejected"];
+
 export default function FilterControls({
-  categories,
-  extensions,
-  statuses,
   selectedCategory,
+  selectedType,
   selectedExtension,
   selectedStatus,
   onFilterChange,
 }: FilterControlsProps) {
-  const hasActiveFilters = selectedCategory !== "All" || selectedExtension !== "All" || selectedStatus !== "All";
+  const { documentCategories: categories, documentTypes: types } = useDocument();
+
+  const hasActiveFilters =
+    selectedCategory !== "All" || selectedType !== "All" || selectedExtension !== "All" || selectedStatus !== "All";
 
   const clearAllFilters = () => {
     onFilterChange("category", "All");
+    onFilterChange("type", "All");
     onFilterChange("extension", "All");
     onFilterChange("status", "All");
   };
@@ -38,6 +42,9 @@ export default function FilterControls({
     if (selectedStatus !== "All") count++;
     return count;
   };
+
+  const getCategoryName = (id: string) => categories.find((c) => c.id === id)?.name || id;
+  const getTypeName = (id: string) => types.find((t) => t.id === id)?.name || id;
 
   return (
     <div className="flex flex-wrap items-center gap-4">
@@ -57,9 +64,28 @@ export default function FilterControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="All">All</SelectItem>
             {categories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
+              <SelectItem key={category.id} value={category.id}>
+                {category.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Document Type Filter */}
+      <div className="flex items-center gap-2">
+        <label className="text-sm text-muted-foreground">Type:</label>
+        <Select value={selectedType} onValueChange={(value) => onFilterChange("type", value)}>
+          <SelectTrigger className="w-32">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="All">All</SelectItem>
+            {types.map((type) => (
+              <SelectItem key={type.id} value={type.id}>
+                {type.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -68,7 +94,7 @@ export default function FilterControls({
 
       {/* Extension Filter */}
       <div className="flex items-center gap-2">
-        <label className="text-sm text-muted-foreground">Type:</label>
+        <label className="text-sm text-muted-foreground">Extension:</label>
         <Select value={selectedExtension} onValueChange={(value) => onFilterChange("extension", value)}>
           <SelectTrigger className="w-28">
             <SelectValue />
@@ -118,12 +144,25 @@ export default function FilterControls({
         <div className="flex flex-wrap gap-1 w-full mt-2">
           {selectedCategory !== "All" && (
             <Badge variant="outline" className="text-xs">
-              Category: {selectedCategory}
+              Category: {getCategoryName(selectedCategory)}
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-3 w-3 ml-1 p-0"
                 onClick={() => onFilterChange("category", "All")}
+              >
+                <X className="h-2 w-2" />
+              </Button>
+            </Badge>
+          )}
+          {selectedType !== "All" && (
+            <Badge variant="outline" className="text-xs">
+              Document Type: {getTypeName(selectedType)}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-3 w-3 ml-1 p-0"
+                onClick={() => onFilterChange("type", "All")}
               >
                 <X className="h-2 w-2" />
               </Button>

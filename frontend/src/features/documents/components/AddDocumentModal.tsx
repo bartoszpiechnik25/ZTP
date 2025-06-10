@@ -12,23 +12,14 @@ import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
 import { Label } from "@/shared/components/ui/Label";
 import { Textarea } from "@/shared/components/ui/Textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/Select";
 import { Badge } from "@/shared/components/ui/Badge";
 import { Card, CardContent } from "@/shared/components/ui/Card";
 import { Upload, File, X, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/Alert";
 
-interface AddDocumentModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (documentData: DocumentFormData) => void;
-  categories: string[];
-}
-
 interface DocumentFormData {
   title: string;
   description: string;
-  category: string;
   tags: string[];
   files: File[];
 }
@@ -41,11 +32,16 @@ const formatFileSize = (bytes: number) => {
   return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 };
 
-export default function AddDocumentModal({ isOpen, onClose, onAdd, categories }: AddDocumentModalProps) {
+interface AddDocumentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: () => void;
+}
+
+export default function AddDocumentModal({ isOpen, onClose, onAdd }: AddDocumentModalProps) {
   const [formData, setFormData] = useState<DocumentFormData>({
     title: "",
     description: "",
-    category: "",
     tags: [],
     files: [],
   });
@@ -120,9 +116,6 @@ export default function AddDocumentModal({ isOpen, onClose, onAdd, categories }:
     if (!formData.title.trim()) {
       validationErrors.push("Title is required");
     }
-    if (!formData.category) {
-      validationErrors.push("Category is required");
-    }
     if (formData.files.length === 0) {
       validationErrors.push("At least one file is required");
     }
@@ -134,7 +127,8 @@ export default function AddDocumentModal({ isOpen, onClose, onAdd, categories }:
 
     setIsLoading(true);
     try {
-      await onAdd(formData);
+      // TODO: Implement actual upload logic here
+      onAdd();
       handleClose();
     } catch {
       setErrors(["Failed to upload documents. Please try again."]);
@@ -143,11 +137,11 @@ export default function AddDocumentModal({ isOpen, onClose, onAdd, categories }:
     }
   };
 
+  // Reset form and close modal
   const handleClose = () => {
     setFormData({
       title: "",
       description: "",
-      category: "",
       tags: [],
       files: [],
     });
@@ -255,23 +249,6 @@ export default function AddDocumentModal({ isOpen, onClose, onAdd, categories }:
               onChange={(e) => handleInputChange("description", e.target.value)}
               rows={3}
             />
-          </div>
-
-          {/* Category */}
-          <div className="space-y-2">
-            <Label>Category *</Label>
-            <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
 
           {/* Tags */}
