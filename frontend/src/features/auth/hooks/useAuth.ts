@@ -16,7 +16,7 @@ export const useAuth = () => {
       setAuth(data.user);
       localStorage.setItem("authToken", data.token);
       queryClient.setQueryData(["user"], data.user);
-      navigate("/about"); // TODO: Change to a more appropriate route after registration
+      navigate("/dashboard");
     },
   });
 

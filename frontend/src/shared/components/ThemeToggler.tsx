@@ -6,14 +6,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/DropdownMenu";
+import { cn } from "@/shared/utils/shadcn";
 import { Sun, Moon } from "lucide-react";
 
-const ThemeToggler = () => {
+const ThemeToggler = ({ className }: { className?: string }) => {
   const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="h-10 w-10 cursor-pointer" asChild>
+      <DropdownMenuTrigger className={cn("h-10 w-10 cursor-pointer", className)} asChild>
         <Button size="icon">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
