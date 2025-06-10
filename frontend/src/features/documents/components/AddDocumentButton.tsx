@@ -11,7 +11,7 @@ export default function AddDocumentButton({ onClick, variant = "default", size =
   return (
     <Button onClick={onClick} variant={variant} size={size} className="gap-2">
       <Plus className="h-4 w-4" />
-      Add Document
+      Add document
     </Button>
   );
 }

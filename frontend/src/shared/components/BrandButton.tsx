@@ -37,6 +37,11 @@ interface BrandButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
    * @default false
    */
   asChild?: boolean;
+
+  /**
+   * The content to be rendered inside the button.
+   */
+  children?: React.ReactNode;
 }
 
 /**
@@ -55,6 +60,7 @@ const BrandButton = ({
   asChild = false,
   disabled,
   onClick,
+  children,
   ...props
 }: BrandButtonProps) => {
   return (
@@ -67,9 +73,9 @@ const BrandButton = ({
       onClick={onClick}
       {...props}
     >
-      {isLoading ? (
-        <LoadingSpinner size={spinnerSize} className="animate-spin stroke-primary-foreground" />
-      ) : (
+      {isLoading && <LoadingSpinner size={spinnerSize} className="animate-spin stroke-primary-foreground" />}
+      {!isLoading && children}
+      {!isLoading && !children && (
         <>
           {leftIcon}
           {label}

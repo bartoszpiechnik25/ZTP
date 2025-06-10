@@ -65,7 +65,9 @@ export function DashboardSidebar() {
   const location = useLocation();
 
   const isActivePath = (path: string) => {
-    return location.pathname === path || location.pathname.endsWith(path);
+    if (location.pathname === path) return true;
+    if (path === "/app") return location.pathname === "/app";
+    return location.pathname.startsWith(`${path}/`);
   };
 
   return (

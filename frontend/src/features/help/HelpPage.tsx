@@ -45,13 +45,13 @@ const faqItems = [
 
 const quickLinks = [
   {
-    title: "Getting Started Guide",
+    title: "Getting started guide",
     description: "Learn the basics of CatDoc",
     icon: BookOpen,
     href: "#getting-started",
   },
   {
-    title: "Upload Documents",
+    title: "Upload documents",
     description: "How to add your first document",
     icon: Upload,
     href: "#upload-guide",
@@ -63,7 +63,7 @@ const quickLinks = [
     href: "#search-guide",
   },
   {
-    title: "Account Security",
+    title: "Account security",
     description: "Protect your account",
     icon: Shield,
     href: "#security-guide",
@@ -92,7 +92,7 @@ export default function HelpPage() {
       <div className="grid gap-6 md:grid-cols-3">
         {/* Quick Links */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Quick Links</h2>
+          <h2 className="text-lg font-semibold">Quick links</h2>
           <div className="space-y-3">
             {quickLinks.map((link) => {
               const Icon = link.icon;
@@ -139,7 +139,7 @@ export default function HelpPage() {
       {/* Contact Support */}
       <Card>
         <CardHeader>
-          <CardTitle>Still Need Help?</CardTitle>
+          <CardTitle>Still need help?</CardTitle>
           <CardDescription>Get in touch with our support team</CardDescription>
         </CardHeader>
         <CardContent>
@@ -149,7 +149,7 @@ export default function HelpPage() {
                 <MessageCircle className="h-8 w-8 text-primary mx-auto mb-3" />
                 <h4 className="font-medium mb-2">Live Chat</h4>
                 <p className="text-sm text-muted-foreground mb-3">Get instant help from our support team</p>
-                <Button className="w-full">Start Chat</Button>
+                <Button className="w-full">Start chat</Button>
               </CardContent>
             </Card>
 
@@ -159,7 +159,7 @@ export default function HelpPage() {
                 <h4 className="font-medium mb-2">Email Support</h4>
                 <p className="text-sm text-muted-foreground mb-3">Send us a detailed message</p>
                 <Button variant="outline" className="w-full">
-                  Send Email
+                  Send email
                 </Button>
               </CardContent>
             </Card>
@@ -171,7 +171,7 @@ export default function HelpPage() {
                 <p className="text-sm text-muted-foreground mb-3">Browse our complete guide</p>
                 <Button variant="outline" className="w-full">
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  View Docs
+                  View docs
                 </Button>
               </CardContent>
             </Card>
@@ -182,7 +182,7 @@ export default function HelpPage() {
       {/* System Status */}
       <Card>
         <CardHeader>
-          <CardTitle>System Status</CardTitle>
+          <CardTitle>System status</CardTitle>
           <CardDescription>Current status of CatDoc services</CardDescription>
         </CardHeader>
         <CardContent>

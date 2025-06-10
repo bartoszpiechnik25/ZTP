@@ -15,7 +15,7 @@ import PaginationControls from "@/features/documents/components/PaginationContro
 import SearchBar from "@/features/documents/components/SearchBar";
 
 // Mock data for prototype
-const mockDocuments = [
+const mockDocuments: Document[] = [
   {
     id: "1",
     title: "Financial Report Q4 2024",
@@ -210,7 +210,7 @@ export default function DocumentsPage() {
 
   const handleDocumentClick = useCallback(
     (documentId: string) => {
-      navigate(`/documents/${documentId}`);
+      navigate(`/app/documents/${documentId}`);
     },
     [navigate]
   );

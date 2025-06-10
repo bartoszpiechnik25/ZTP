@@ -78,9 +78,25 @@ export default function DashboardPage() {
 
       {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <Card
+          key="view-analytics"
+          className="cursor-pointer hover:shadow-md transition-shadow"
+          onClick={() => navigate("/app/analytics")}
+        >
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <CardTitle className="text-lg">View analytics</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>See document insights</CardDescription>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
+            <CardTitle className="text-sm font-medium">Total documents</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -91,7 +107,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Recent Uploads</CardTitle>
+            <CardTitle className="text-sm font-medium">Recent uploads</CardTitle>
             <Upload className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -113,28 +129,12 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Storage Used</CardTitle>
+            <CardTitle className="text-sm font-medium">Storage used</CardTitle>
             <Archive className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockStats.storageUsed}</div>
             <p className="text-xs text-muted-foreground">of 10 GB limit</p>
-          </CardContent>
-        </Card>
-
-        <Card
-          key="view-analytics"
-          className="cursor-pointer hover:shadow-md transition-shadow"
-          onClick={() => navigate("/app/analytics")}
-        >
-          <CardHeader className="pb-3">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              <CardTitle className="text-lg">View Analytics</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>See document insights</CardDescription>
           </CardContent>
         </Card>
       </div>
@@ -144,11 +144,11 @@ export default function DashboardPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Recent Documents</CardTitle>
+              <CardTitle>Recent documents</CardTitle>
               <CardDescription>Your latest uploaded and processed documents</CardDescription>
             </div>
             <Button variant="outline" onClick={() => navigate("/app/documents")}>
-              View All
+              View all
             </Button>
           </div>
         </CardHeader>
@@ -158,7 +158,7 @@ export default function DashboardPage() {
               <div
                 key={doc.id}
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 cursor-pointer"
-                onClick={() => navigate(`/documents/${doc.id}`)}
+                onClick={() => navigate(`/app/documents/${doc.id}`)}
               >
                 <div className="flex items-center gap-4">
                   <FileText className="h-8 w-8 text-muted-foreground" />

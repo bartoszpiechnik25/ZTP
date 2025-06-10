@@ -35,7 +35,7 @@ const authApi = {
       return { user, token };
     } catch (error) {
       // check if the error has status code 401, if so, throw a specific error if not throw a generic error
-      if (isAxiosError(error) && error.status === 404) {
+      if (isAxiosError(error) && isAxiosError(error) && error.response?.status === 404) {
         throw new Error("Invalid username or password. Provide correct credentials and try again.");
       }
       throw new Error("An error occurred during sign-in. Please try again.");
@@ -50,7 +50,7 @@ const authApi = {
 
       await api.post("/user/create", userDataWithRole);
     } catch (error) {
-      if (isAxiosError(error) && error.status === 400) {
+      if (isAxiosError(error) && error.response?.status === 400) {
         throw new Error("Invalid input. Please check your details and try again.");
       }
       throw new Error("An error occurred during registration. Please try again.");
@@ -76,7 +76,7 @@ const authApi = {
       });
       return validateResponse(UserResponseSchema, response);
     } catch (error) {
-      if (isAxiosError(error) && error.status === 404) {
+      if (isAxiosError(error) && error.response?.status === 404) {
         throw new Error("User not found. Please check the email and try again.");
       }
       throw new Error("Failed to fetch user by email. Please try again");
@@ -88,7 +88,7 @@ const authApi = {
       const response = await api.get(`/user/${username}`);
       return validateResponse(UserResponseSchema, response);
     } catch (error) {
-      if (isAxiosError(error) && error.status === 404) {
+      if (isAxiosError(error) && error.response?.status === 404) {
         throw new Error("User not found. Please check the username and try again.");
       }
       throw new Error("Failed to fetch user by username. Please try again");

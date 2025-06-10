@@ -74,12 +74,12 @@ export default function SettingsPage() {
 
             <Button variant="outline" className="w-full justify-start">
               <Lock className="h-4 w-4 mr-2" />
-              Change Password
+              Change password
             </Button>
 
             <Button variant="outline" className="w-full justify-start">
               <Database className="h-4 w-4 mr-2" />
-              Download My Data
+              Download my data
             </Button>
           </CardContent>
         </Card>
@@ -144,17 +144,17 @@ export default function SettingsPage() {
       {/* Danger Zone */}
       <Card className="border-destructive/50">
         <CardHeader>
-          <CardTitle className="text-destructive">Danger Zone</CardTitle>
+          <CardTitle className="text-destructive">Danger zone</CardTitle>
           <CardDescription>Irreversible and destructive actions</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between p-4 border border-destructive/20 rounded-md">
             <div>
-              <h4 className="font-medium">Delete Account</h4>
+              <h4 className="font-medium">Delete account</h4>
               <p className="text-sm text-muted-foreground">Permanently delete your account and all associated data</p>
             </div>
             <Button variant="destructive" size="sm">
-              Delete Account
+              Delete account
             </Button>
           </div>
         </CardContent>

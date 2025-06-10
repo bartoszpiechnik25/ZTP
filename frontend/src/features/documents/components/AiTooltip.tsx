@@ -10,7 +10,7 @@ const AiTooltip = ({ iconClassName }: { iconClassName?: string }) => {
       <TooltipTrigger>
         <img
           src={aiStars}
-          alt="aiStar"
+          alt="AI categorization indicator"
           className={cn("h-4 w-4 mx-1", iconClassName, theme === "dark" ? "white-svg" : "black-svg")}
         />
       </TooltipTrigger>

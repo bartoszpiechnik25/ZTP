@@ -282,7 +282,7 @@ export default function AddDocumentModal({ isOpen, onClose, onAdd, categories }:
                 placeholder="Add a tag"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
+                onKeyDown={(e) => e.key === "Enter" && handleAddTag()}
               />
               <Button type="button" onClick={handleAddTag} variant="outline">
                 Add

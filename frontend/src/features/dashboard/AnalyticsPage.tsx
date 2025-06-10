@@ -54,7 +54,7 @@ export default function AnalyticsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Documents This Month</CardTitle>
+            <CardTitle className="text-sm font-medium">Documents this month</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -75,7 +75,7 @@ export default function AnalyticsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Storage Usage</CardTitle>
+            <CardTitle className="text-sm font-medium">Storage usage</CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -91,7 +91,7 @@ export default function AnalyticsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Categories</CardTitle>
+            <CardTitle className="text-sm font-medium">Total categories</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
         {/* Top Categories */}
         <Card>
           <CardHeader>
-            <CardTitle>Document Categories</CardTitle>
+            <CardTitle>Document categories</CardTitle>
             <CardDescription>Distribution of documents by category</CardDescription>
           </CardHeader>
           <CardContent>
@@ -131,7 +131,7 @@ export default function AnalyticsPage() {
         {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Recent activity</CardTitle>
             <CardDescription>Document uploads and downloads over the past week</CardDescription>
           </CardHeader>
           <CardContent>
