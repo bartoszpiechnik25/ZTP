@@ -19,7 +19,7 @@ type Form = z.infer<typeof SignInRequestSchema>;
 
 const SignInForm = () => {
   const location = useLocation();
-  const { signIn, isLoading, isSignInError, signInError } = useAuth();
+  const { signIn, isLoading } = useAuth();
 
   const form = useForm<Form>({
     resolver: zodResolver(SignInRequestSchema),
@@ -36,14 +36,6 @@ const SignInForm = () => {
       });
     }
   }, [location.state]);
-
-  useEffect(() => {
-    if (isSignInError) {
-      toast.error("Sign in failed", {
-        description: signInError?.message || "An error occurred while signing in. Please try again.",
-      });
-    }
-  }, [isSignInError, signInError]);
 
   const onSubmit = (data: Form) => {
     signIn(data);

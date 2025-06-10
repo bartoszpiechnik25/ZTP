@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { useEffect } from "react";
 import { Link } from "react-router";
 import { ForgotPasswordRequestSchema } from "@/features/auth/schemas";
 import BrandButton from "@/shared/components/BrandButton";
@@ -13,12 +12,11 @@ import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
 import { Separator } from "@/shared/components/ui/Separator";
 import { Muted } from "@/shared/components/ui/typography/Paragraph";
 import { motion } from "framer-motion";
-import { toast } from "sonner";
 
 type Form = z.infer<typeof ForgotPasswordRequestSchema>;
 
 const ForgotPasswordForm = () => {
-  const { forgotPassword, isLoading, isForgotPasswordError, forgotPasswordError } = useAuth();
+  const { forgotPassword, isLoading } = useAuth();
 
   const form = useForm<Form>({
     resolver: zodResolver(ForgotPasswordRequestSchema),
@@ -26,14 +24,6 @@ const ForgotPasswordForm = () => {
       email: "",
     },
   });
-
-  useEffect(() => {
-    if (isForgotPasswordError) {
-      toast.error("Password reset failed", {
-        description: forgotPasswordError?.message || "An error occurred while processing your request.",
-      });
-    }
-  }, [isForgotPasswordError, forgotPasswordError]);
 
   const onSubmit = (data: Form) => {
     forgotPassword(data);

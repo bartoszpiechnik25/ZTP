@@ -17,7 +17,7 @@ import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
 import { Separator } from "@/shared/components/ui/Separator";
 import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
 import { SidebarTrigger } from "@/shared/components/ui/Sidebar";
-import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { useTheme } from "@/app/providers/ThemeProvider";
 import { P } from "@/shared/components/ui/typography/Paragraph";
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { PanelLeftIcon } from "lucide-react";
 
-import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { cn } from "@/shared/utils/shadcn";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/components/ui/Tooltip";
 import { Button } from "@/shared/components/ui/Button";
