@@ -1,15 +1,12 @@
+import HomeBackground from "@/features/home/components/HomeBackground";
 import HomeContent from "@/features/home/components/HomeContent";
-import HomeNavigationMenu from "@/features/home/components/HomeNavigationMenu";
-import HomeTodos from "@/features/home/components/HomeTodos";
 
-function HomePage() {
+const HomePage = () => {
   return (
-    <div className="max-w-[1280px] mx-auto p-8 text-center pt-30">
-      <HomeNavigationMenu />
+    <div className="w-full h-screen flex flex-row">
       <HomeContent />
-      <HomeTodos />
+      <HomeBackground />
     </div>
   );
-}
-
+};
 export default HomePage;

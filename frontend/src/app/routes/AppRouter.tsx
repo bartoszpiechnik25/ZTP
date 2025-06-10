@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import HomePage from "@/features/home/HomePage";
-import AboutPage from "@/features/about/AboutPage";
+import ResearchPage from "@/features/research/ResearchPage";
 import SignInForm from "@/features/auth/components/SignInForm";
 import SignUpForm from "@/features/auth/components/SignUpForm";
 import AuthLayout from "@/features/auth/AuthLayout";
@@ -16,7 +16,7 @@ const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route index element={<HomePage />} />
-        <Route path="about" element={<AboutPage />} />
+        <Route path="test" element={<ResearchPage />} />
 
         <Route element={<AuthLayout />}>
           <Route path="sign-in" element={<SignInForm />} />

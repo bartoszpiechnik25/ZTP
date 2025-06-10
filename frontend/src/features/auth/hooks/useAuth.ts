@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { useAppStore } from "@/shared/store/useAppStore";
 import authApi from "@/features/auth/api/authApi";
 import type { ForgotPasswordRequest, SignInRequest, SignUpRequest } from "@/features/auth/types";
-import type { ApiError } from "@/app/api";
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -19,13 +18,6 @@ export const useAuth = () => {
       queryClient.setQueryData(["user"], data.user);
       navigate("/about"); // TODO: Change to a more appropriate route after registration
     },
-    onError: (error: ApiError) => {
-      const error_ =
-        error.code === 401
-          ? new Error("Invalid username or password. Please try again.")
-          : new Error("An error occurred while signing in. Please try again.");
-      throw error_;
-    },
   });
 
   const signUpMutation = useMutation({
@@ -33,22 +25,12 @@ export const useAuth = () => {
     onSuccess: () => {
       navigate("/sign-in", { state: { status: "signed-up-success" } });
     },
-    onError: (error: ApiError) => {
-      const error_ =
-        error.code === 400
-          ? new Error("Invalid input. Please check your details and try again.")
-          : new Error("An error occurred during registration. Please try again.");
-      throw error_;
-    },
   });
 
   const forgotPasswordMutation = useMutation({
     mutationFn: (credentials: ForgotPasswordRequest) => authApi.forgotPassword(credentials),
     onSuccess: () => {
       navigate("/forgot-password/success");
-    },
-    onError: () => {
-      throw new Error("An error occurred while sending the reset email. Please try again.");
     },
   });
 

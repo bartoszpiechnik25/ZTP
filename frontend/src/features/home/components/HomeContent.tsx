@@ -1,34 +1,21 @@
-import { Lead } from "@/shared/components/ui/typography/Paragraph";
+import { motion } from "framer-motion";
+import { H1 } from "@/shared/components/ui/typography/Headings";
+import BrandButton from "@/shared/components/BrandButton";
 import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
-import { motion } from "motion/react";
-
-import { Link } from "react-router";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/shared/components/ui/NavigationMenu";
+import { useNavigate } from "react-router";
 
 const HomeContent = () => {
+  const navigate = useNavigate();
+  const onClickHandler = () => navigate("/sign-in");
+
   return (
-    <div>
-      <div className="p-10 flex flex-col items-center justify-center gap-8">
-        <CatDocLogo />
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 3 }}>
-          <Lead>Say goodbye to document chaos.</Lead>
-          <Lead>CatDoc brings intelligent, effortless document management powered by AI 😻</Lead>
-        </motion.div>
-        <NavigationMenu viewport={false}>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link to="/docs">Docs</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
+    <div className="flex flex-3 bg-white m-16 flex-col gap-30">
+      <CatDocLogo iconSize={24} containerClassName="items-center" textClassName="text-2xl" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 3 }} className="space-y-20">
+        <H1 className="text-primary leading-12">Say goodbye to document chaos.</H1>
+        <H1 className="text-end text-primary leading-12">Effortless document management powered by AI 😻</H1>
+      </motion.div>
+      <BrandButton className="w-1/3 h-14 text-xl" onClick={onClickHandler} label="Get Started" />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { SignUpRequestSchema } from "@/features/auth/schemas";
 import BrandButton from "@/shared/components/BrandButton";
 import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
@@ -18,7 +18,6 @@ import { toast } from "sonner";
 type Form = z.infer<typeof SignUpRequestSchema>;
 
 const SignUpForm = () => {
-  const navigate = useNavigate();
   const { signUp, isLoading, isSignUpError, signUpError } = useAuth();
 
   const form = useForm<Form>({
@@ -41,21 +40,15 @@ const SignUpForm = () => {
     }
   }, [isSignUpError, signUpError]);
 
-  const onSubmit = async (data: Form) => {
-    try {
-      await signUp(data);
-      toast.success("Registration successful!");
-      navigate("/sign-in", { state: { status: "signed-up-success" } });
-    } catch {
-      // Error handled by useEffect
-    }
+  const onSubmit = (data: Form) => {
+    signUp(data);
   };
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col justify-center absolute top-0 bottom-0 left-15/100 w-1/2 lg:w-1/3"
+      className="flex flex-col justify-center absolute top-0 bottom-0 left-1/10 w-1/2 lg:w-1/3"
     >
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
