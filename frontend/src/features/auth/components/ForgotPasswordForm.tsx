@@ -43,7 +43,7 @@ const ForgotPasswordForm = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col justify-center absolute top-0 bottom-0 left-15/100 w-1/2 md:w-1/3 lg:w-1/4"
+      className="flex flex-col justify-center absolute top-0 bottom-0 left-1/10 w-1/2 md:w-1/3 lg:w-1/4"
     >
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>

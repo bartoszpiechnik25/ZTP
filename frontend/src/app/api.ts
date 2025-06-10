@@ -27,6 +27,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response
+  // TODO: Consider handling response errors globally
   // async (error) => {
   //   console.error("[api] Response error:", error);
 
@@ -71,26 +72,5 @@ api.interceptors.response.use(
   //   throw error;
   // }
 );
-
-export interface ApiError {
-  message: string;
-  code: string | number;
-  details?: Record<string, unknown>;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const formatApiError = (error: any, defaultMessage: string): ApiError => {
-  if (error.request) {
-    // No response received
-    return {
-      message: "Network error. Please check your connection",
-      code: "NETWORK_ERROR",
-    };
-  }
-  return {
-    message: error.message || defaultMessage,
-    code: "REQUEST_ERROR",
-  };
-};
 
 export default api;
