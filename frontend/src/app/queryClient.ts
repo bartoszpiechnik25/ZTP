@@ -1,13 +1,33 @@
-import { QueryCache, QueryClient } from "@tanstack/react-query";
+import { MutationCache, QueryCache, QueryClient, type QueryMeta } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
-    onError: (error) =>
+    onError: (error, query) => {
+      // Log error for debugging
+      console.error("Query Error:", {
+        queryKey: query.queryKey,
+        error,
+        meta: query.meta,
+      });
       toast.error("Something went wrong", {
         description: error?.message || "An unexpected error occurred.",
-      }),
+      });
+    },
+  }),
+  mutationCache: new MutationCache({
+    onError: (error, _variables, _context, mutation) => {
+      const meta = mutation.meta as QueryMeta | undefined;
+      // Log error for debugging
+      console.error("Mutation Error:", {
+        mutation: meta?.mutationId,
+        error,
+      });
+      toast.error("Something went wrong", {
+        description: error?.message || "An unexpected error occurred.",
+      });
+    },
   }),
   defaultOptions: {
     queries: {
