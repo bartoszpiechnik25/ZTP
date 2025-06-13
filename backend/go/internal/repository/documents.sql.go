@@ -76,6 +76,41 @@ func (q *Queries) CreateUserDocument(ctx context.Context, arg CreateUserDocument
 	return err
 }
 
+const deleteDocument = `-- name: DeleteDocument :exec
+DELETE FROM documents
+WHERE id = $1
+`
+
+func (q *Queries) DeleteDocument(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteDocument, id)
+	return err
+}
+
+const deleteDocumentPages = `-- name: DeleteDocumentPages :exec
+DELETE FROM document_pages
+WHERE document_id = $1
+`
+
+func (q *Queries) DeleteDocumentPages(ctx context.Context, documentID uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteDocumentPages, documentID)
+	return err
+}
+
+const deleteUserDocument = `-- name: DeleteUserDocument :exec
+DELETE FROM user_documents
+WHERE user_id = $1 AND document_id = $2
+`
+
+type DeleteUserDocumentParams struct {
+	UserID     uuid.UUID `json:"user_id"`
+	DocumentID uuid.UUID `json:"document_id"`
+}
+
+func (q *Queries) DeleteUserDocument(ctx context.Context, arg DeleteUserDocumentParams) error {
+	_, err := q.db.Exec(ctx, deleteUserDocument, arg.UserID, arg.DocumentID)
+	return err
+}
+
 const getAllUserDocuments = `-- name: GetAllUserDocuments :many
 SELECT
     d.id,
@@ -126,6 +161,42 @@ func (q *Queries) GetAllUserDocuments(ctx context.Context, userID uuid.UUID) ([]
 	return items, nil
 }
 
+const getDocumentById = `-- name: GetDocumentById :one
+SELECT
+    d.id,
+    d.title,
+    d.notes,
+    dc.name AS category,
+    dt.name AS type
+FROM
+    documents d
+    JOIN document_categories dc ON dc.id = d.document_category_id
+    JOIN document_types dt ON dt.id = d.document_type_id
+WHERE
+    d.id = $1
+`
+
+type GetDocumentByIdRow struct {
+	ID       uuid.UUID `json:"id"`
+	Title    *string   `json:"title"`
+	Notes    *string   `json:"notes"`
+	Category string    `json:"category"`
+	Type     string    `json:"type"`
+}
+
+func (q *Queries) GetDocumentById(ctx context.Context, id uuid.UUID) (GetDocumentByIdRow, error) {
+	row := q.db.QueryRow(ctx, getDocumentById, id)
+	var i GetDocumentByIdRow
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Notes,
+		&i.Category,
+		&i.Type,
+	)
+	return i, err
+}
+
 const getDocumentCategories = `-- name: GetDocumentCategories :many
 SELECT
     id, name
@@ -169,6 +240,49 @@ func (q *Queries) GetDocumentCategory(ctx context.Context, name string) (Documen
 	return i, err
 }
 
+const getDocumentPages = `-- name: GetDocumentPages :many
+SELECT
+    id,
+    page_number,
+    content_type,
+    data,
+    ocr_content,
+    document_id
+FROM
+    document_pages
+WHERE
+    document_id = $1
+ORDER BY
+    page_number ASC
+`
+
+func (q *Queries) GetDocumentPages(ctx context.Context, documentID uuid.UUID) ([]DocumentPage, error) {
+	rows, err := q.db.Query(ctx, getDocumentPages, documentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []DocumentPage
+	for rows.Next() {
+		var i DocumentPage
+		if err := rows.Scan(
+			&i.ID,
+			&i.PageNumber,
+			&i.ContentType,
+			&i.Data,
+			&i.OcrContent,
+			&i.DocumentID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getDocumentType = `-- name: GetDocumentType :one
 SELECT
     id, name
@@ -210,4 +324,58 @@ func (q *Queries) GetDocumentTypes(ctx context.Context) ([]DocumentType, error) 
 		return nil, err
 	}
 	return items, nil
+}
+
+const getDocumentWithPages = `-- name: GetDocumentWithPages :one
+SELECT
+    d.id,
+    d.title,
+    d.notes,
+    dc.name AS category,
+    dt.name AS type
+FROM
+    documents d
+    JOIN document_categories dc ON dc.id = d.document_category_id
+    JOIN document_types dt ON dt.id = d.document_type_id
+WHERE
+    d.id = $1
+`
+
+type GetDocumentWithPagesRow struct {
+	ID       uuid.UUID `json:"id"`
+	Title    *string   `json:"title"`
+	Notes    *string   `json:"notes"`
+	Category string    `json:"category"`
+	Type     string    `json:"type"`
+}
+
+func (q *Queries) GetDocumentWithPages(ctx context.Context, id uuid.UUID) (GetDocumentWithPagesRow, error) {
+	row := q.db.QueryRow(ctx, getDocumentWithPages, id)
+	var i GetDocumentWithPagesRow
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Notes,
+		&i.Category,
+		&i.Type,
+	)
+	return i, err
+}
+
+const verifyUserOwnsDocument = `-- name: VerifyUserOwnsDocument :one
+SELECT COUNT(*) > 0 AS owns_document
+FROM user_documents
+WHERE user_id = $1 AND document_id = $2
+`
+
+type VerifyUserOwnsDocumentParams struct {
+	UserID     uuid.UUID `json:"user_id"`
+	DocumentID uuid.UUID `json:"document_id"`
+}
+
+func (q *Queries) VerifyUserOwnsDocument(ctx context.Context, arg VerifyUserOwnsDocumentParams) (bool, error) {
+	row := q.db.QueryRow(ctx, verifyUserOwnsDocument, arg.UserID, arg.DocumentID)
+	var owns_document bool
+	err := row.Scan(&owns_document)
+	return owns_document, err
 }

@@ -8,19 +8,23 @@ import (
 
 	e "ztp/internal/error"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
 type DocumentService struct {
 	createDocument    DocumentCreateService
 	retrieveDocuments DocumentRetrieverService
+	deleteDocument    DocumentDeleteService
 }
 
 func New(r *repository.Repository) *DocumentService {
 	return &DocumentService{
 		createDocument:    NewCreateDocumentService(r),
 		retrieveDocuments: NewDocumentRetrieverService(r),
+		deleteDocument:    NewDocumentDeleteService(r),
 	}
 }
 
@@ -85,4 +89,62 @@ func (ds *DocumentService) HandleGetAllUserDocuments(w http.ResponseWriter, r *h
 	}
 	_ = render.Render(w, r, models.MapToGetAllUserDocumentsResponse(documents))
 	logrus.Info("User documents retrieved")
+}
+
+func (ds *DocumentService) HandleGetDocumentById(w http.ResponseWriter, r *http.Request) {
+	logrus.Info("Starting get document by id handler")
+	ctx := r.Context()
+
+	// Get user ID from context
+	userId, err := utils.UserIdFromContext(ctx)
+	if err != nil {
+		e.HandleAPIError(err, "failed to obtain user id", w, r)
+		return
+	}
+
+	// Get document ID from URL parameter
+	documentIdStr := chi.URLParam(r, "id")
+	documentId, err := uuid.Parse(documentIdStr)
+	if err != nil {
+		e.HandleAPIError(err, "invalid document id", w, r)
+		return
+	}
+
+	document, err := ds.retrieveDocuments.GetDocumentById(ctx, *userId, documentId)
+	if err != nil {
+		e.HandleAPIError(err, "could not retrieve document", w, r)
+		return
+	}
+
+	_ = render.Render(w, r, models.MapToGetDocumentByIdResponse(*document))
+	logrus.Info("Document retrieved successfully")
+}
+
+func (ds *DocumentService) HandleDeleteDocument(w http.ResponseWriter, r *http.Request) {
+	logrus.Info("Starting delete document handler")
+	ctx := r.Context()
+
+	// Get user ID from context
+	userId, err := utils.UserIdFromContext(ctx)
+	if err != nil {
+		e.HandleAPIError(err, "failed to obtain user id", w, r)
+		return
+	}
+
+	// Get document ID from URL parameter
+	documentIdStr := chi.URLParam(r, "id")
+	documentId, err := uuid.Parse(documentIdStr)
+	if err != nil {
+		e.HandleAPIError(err, "invalid document id", w, r)
+		return
+	}
+
+	err = ds.deleteDocument.DeleteDocument(ctx, *userId, documentId)
+	if err != nil {
+		e.HandleAPIError(err, "could not delete document", w, r)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+	logrus.Info("Document deleted successfully")
 }

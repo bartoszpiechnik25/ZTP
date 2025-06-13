@@ -52,3 +52,15 @@ func MapToGetAllUserDocumentsResponse(documents []repository.GetAllUserDocuments
 		Documents: documents,
 	}
 }
+
+func MapToGetDocumentByIdResponse(document repository.GetDocumentByIdRow) *GetDocumentByIdResponse {
+	return &GetDocumentByIdResponse{
+		Document: &DocumentDetail{
+			ID:       document.ID.String(),
+			Title:    document.Title,
+			Notes:    document.Notes,
+			Category: document.Category,
+			Type:     document.Type,
+		},
+	}
+}

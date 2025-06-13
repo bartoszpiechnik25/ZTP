@@ -23,6 +23,13 @@ type Store interface {
 	GetDocumentCategories(ctx context.Context) ([]DocumentCategory, error)
 	CreateUserDocument(ctx context.Context, params CreateUserDocumentParams) error
 	GetAllUserDocuments(ctx context.Context, userID uuid.UUID) ([]GetAllUserDocumentsRow, error)
+	GetDocumentById(ctx context.Context, id uuid.UUID) (GetDocumentByIdRow, error)
+	GetDocumentWithPages(ctx context.Context, id uuid.UUID) (GetDocumentWithPagesRow, error)
+	GetDocumentPages(ctx context.Context, documentID uuid.UUID) ([]DocumentPage, error)
+	DeleteDocument(ctx context.Context, id uuid.UUID) error
+	DeleteDocumentPages(ctx context.Context, documentID uuid.UUID) error
+	DeleteUserDocument(ctx context.Context, arg DeleteUserDocumentParams) error
+	VerifyUserOwnsDocument(ctx context.Context, arg VerifyUserOwnsDocumentParams) (bool, error)
 }
 
 type Repository struct {
