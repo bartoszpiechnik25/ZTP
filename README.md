@@ -1,3 +1,5 @@
+![logo](https://github.com/user-attachments/assets/218d6cd0-4240-4e85-878a-e9af60cdb1ec)
+
 # CatDoc
 
 A comprehensive document processing platform that combines OCR (Optical Character Recognition) and document classification capabilities with a modern web interface. Built with microservices architecture using Go, Python, and React.
@@ -6,7 +8,7 @@ A comprehensive document processing platform that combines OCR (Optical Characte
 
 https://github.com/user-attachments/assets/877d756a-cdc7-43b5-b306-3c11bc3e1abb
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture
 
 The application consists of several interconnected services:
 
