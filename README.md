@@ -1,4 +1,4 @@
-# ZTP Document Intelligence Application
+# CatDoc
 
 A comprehensive document processing platform that combines OCR (Optical Character Recognition) and document classification capabilities with a modern web interface. Built with microservices architecture using Go, Python, and React.
 
