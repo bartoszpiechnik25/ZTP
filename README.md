@@ -2,6 +2,10 @@
 
 A comprehensive document processing platform that combines OCR (Optical Character Recognition) and document classification capabilities with a modern web interface. Built with microservices architecture using Go, Python, and React.
 
+## 🎬 Demo
+
+https://github.com/user-attachments/assets/877d756a-cdc7-43b5-b306-3c11bc3e1abb
+
 ## 🏗️ Architecture Overview
 
 The application consists of several interconnected services:
