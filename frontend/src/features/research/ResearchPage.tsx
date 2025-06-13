@@ -1,4 +1,4 @@
-import api from "@/app/api";
+import api from "@/app/axiosClient";
 import TestContent from "@/features/research/components/TestContent";
 import TestNavigationMenu from "@/features/research/components/TestNavigationMenu";
 import TestTodos from "@/features/research/components/TestTodos";

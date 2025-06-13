@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { useEffect } from "react";
 import { Link } from "react-router";
 import { SignUpRequestSchema } from "@/features/auth/schemas";
 import BrandButton from "@/shared/components/BrandButton";
@@ -13,12 +12,11 @@ import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
 import { Separator } from "@/shared/components/ui/Separator";
 import { Muted } from "@/shared/components/ui/typography/Paragraph";
 import { motion } from "framer-motion";
-import { toast } from "sonner";
 
 type Form = z.infer<typeof SignUpRequestSchema>;
 
 const SignUpForm = () => {
-  const { signUp, isLoading, isSignUpError, signUpError } = useAuth();
+  const { signUp, isLoading } = useAuth();
 
   const form = useForm<Form>({
     resolver: zodResolver(SignUpRequestSchema),
@@ -32,14 +30,6 @@ const SignUpForm = () => {
     },
   });
 
-  useEffect(() => {
-    if (isSignUpError) {
-      toast.error("Sign up failed", {
-        description: signUpError?.message || "An error occurred during registration. Please try again.",
-      });
-    }
-  }, [isSignUpError, signUpError]);
-
   const onSubmit = (data: Form) => {
     signUp(data);
   };
@@ -48,7 +38,7 @@ const SignUpForm = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col justify-center absolute top-0 bottom-0 left-1/10 w-1/2 lg:w-1/3"
+      className="flex flex-col justify-center absolute top-0 bottom-0 left-1/10 w-1/2 md:w-1/3"
     >
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>

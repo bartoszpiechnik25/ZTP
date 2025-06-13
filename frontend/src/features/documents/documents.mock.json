@@ -1,0 +1,88 @@
+{
+  "documents": [
+  {
+    "id": "1",
+    "title": "Financial Report Q4 2024",
+    "type": "PDF",
+    "category": "Finance",
+    "size": "2.3 MB",
+    "uploadedAt": "2024-12-15T10:30:00Z",
+    "modifiedAt": "2024-12-15T10:30:00Z",
+    "status": "processed",
+    "thumbnail": null,
+    "description": "Quarterly financial report with revenue analysis",
+    "tags": ["finance", "quarterly", "revenue"],
+    "extension": "pdf"
+  },
+  {
+    "id": "2",
+    "title": "Product Specification v2.1",
+    "type": "DOCX",
+    "category": "Technical",
+    "size": "1.8 MB",
+    "uploadedAt": "2024-12-14T14:20:00Z",
+    "modifiedAt": "2024-12-14T14:20:00Z",
+    "status": "processing",
+    "thumbnail": null,
+    "description": "Technical specifications for product version 2.1",
+    "tags": ["technical", "specification", "product"],
+    "extension": "docx"
+  },
+  {
+    "id": "3",
+    "title": "Marketing Campaign Analysis",
+    "type": "PDF",
+    "category": "Marketing",
+    "size": "3.1 MB",
+    "uploadedAt": "2024-12-13T09:15:00Z",
+    "modifiedAt": "2024-12-13T09:15:00Z",
+    "status": "processed",
+    "thumbnail": null,
+    "description": "Analysis of Q4 marketing campaign performance",
+    "tags": ["marketing", "campaign", "analysis"],
+    "extension": "pdf"
+  },
+  {
+    "id": "4",
+    "title": "Legal Contract Template",
+    "type": "PDF",
+    "category": "Legal",
+    "size": "890 KB",
+    "uploadedAt": "2024-12-10T16:45:00Z",
+    "modifiedAt": "2024-12-10T16:45:00Z",
+    "status": "processed",
+    "thumbnail": null,
+    "description": "Standard legal contract template for vendors",
+    "tags": ["legal", "contract", "template"],
+    "extension": "pdf"
+  },
+  {
+    "id": "5",
+    "title": "Training Materials",
+    "type": "PPTX",
+    "category": "HR",
+    "size": "4.2 MB",
+    "uploadedAt": "2024-12-08T11:30:00Z",
+    "modifiedAt": "2024-12-08T11:30:00Z",
+    "status": "processed",
+    "thumbnail": null,
+    "description": "Employee training presentation materials",
+    "tags": ["hr", "training", "presentation"],
+    "extension": "pptx"
+  },
+  {
+    "id": "6",
+    "title": "Budget Planning 2025",
+    "type": "XLSX",
+    "category": "Finance",
+    "size": "1.2 MB",
+    "uploadedAt": "2024-12-07T13:20:00Z",
+    "modifiedAt": "2024-12-07T13:20:00Z",
+    "status": "failed",
+    "thumbnail": null,
+    "description": "Annual budget planning spreadsheet for 2025",
+    "tags": ["finance", "budget", "planning"],
+    "extension": "xlsx"
+  }
+]
+}

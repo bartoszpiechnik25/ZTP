@@ -3,30 +3,36 @@ import { Badge } from "@/shared/components/ui/Badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/Select";
 import { Filter, X } from "lucide-react";
 import AiTooltip from "@/features/documents/components/AiTooltip";
+import { useDocument } from "@/features/documents/hooks/useDocument";
+import {
+  DOCUMENT_EXTENSIONS,
+  DOCUMENT_STATUSES,
+  type DocumentExtension,
+  type DocumentStatus,
+} from "@/features/documents/types";
 
 interface FilterControlsProps {
-  categories: string[];
-  extensions: string[];
-  statuses: string[];
   selectedCategory: string;
-  selectedExtension: string;
-  selectedStatus: string;
+  selectedType: string;
+  selectedExtension: DocumentExtension;
+  selectedStatus: DocumentStatus;
   onFilterChange: (type: string, value: string) => void;
 }
 
 export default function FilterControls({
-  categories,
-  extensions,
-  statuses,
   selectedCategory,
+  selectedType,
   selectedExtension,
   selectedStatus,
   onFilterChange,
 }: FilterControlsProps) {
-  const hasActiveFilters = selectedCategory !== "All" || selectedExtension !== "All" || selectedStatus !== "All";
+  const { documentCategories: categories, documentTypes: types } = useDocument();
 
+  const hasActiveFilters =
+    selectedCategory !== "All" || selectedType !== "All" || selectedExtension !== "All" || selectedStatus !== "All";
   const clearAllFilters = () => {
     onFilterChange("category", "All");
+    onFilterChange("type", "All");
     onFilterChange("extension", "All");
     onFilterChange("status", "All");
   };
@@ -38,6 +44,9 @@ export default function FilterControls({
     if (selectedStatus !== "All") count++;
     return count;
   };
+
+  const getCategoryName = (id: string) => categories?.find((c) => c.id === id)?.name || id;
+  const getTypeName = (id: string) => types?.find((t) => t.id === id)?.name || id;
 
   return (
     <div className="flex flex-wrap items-center gap-4">
@@ -57,9 +66,26 @@ export default function FilterControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
+            {categories?.map((category) => (
+              <SelectItem key={category.id} value={category.name}>
+                {category.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Document Type Filter */}
+      <div className="flex items-center gap-2">
+        <label className="text-sm text-muted-foreground">Type:</label>
+        <Select value={selectedType} onValueChange={(value) => onFilterChange("type", value)}>
+          <SelectTrigger className="w-32">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {types?.map((type) => (
+              <SelectItem key={type.id} value={type.name}>
+                {type.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -68,13 +94,13 @@ export default function FilterControls({
 
       {/* Extension Filter */}
       <div className="flex items-center gap-2">
-        <label className="text-sm text-muted-foreground">Type:</label>
+        <label className="text-sm text-muted-foreground">Extension:</label>
         <Select value={selectedExtension} onValueChange={(value) => onFilterChange("extension", value)}>
           <SelectTrigger className="w-28">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {extensions.map((extension) => (
+            {DOCUMENT_EXTENSIONS.map((extension) => (
               <SelectItem key={extension} value={extension}>
                 {extension === "All" ? "All" : extension.toUpperCase()}
               </SelectItem>
@@ -91,7 +117,7 @@ export default function FilterControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {statuses.map((status) => (
+            {DOCUMENT_STATUSES.map((status) => (
               <SelectItem key={status} value={status}>
                 {status === "All" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
               </SelectItem>
@@ -118,12 +144,25 @@ export default function FilterControls({
         <div className="flex flex-wrap gap-1 w-full mt-2">
           {selectedCategory !== "All" && (
             <Badge variant="outline" className="text-xs">
-              Category: {selectedCategory}
+              Category: {getCategoryName(selectedCategory)}
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-3 w-3 ml-1 p-0"
                 onClick={() => onFilterChange("category", "All")}
+              >
+                <X className="h-2 w-2" />
+              </Button>
+            </Badge>
+          )}
+          {selectedType !== "All" && (
+            <Badge variant="outline" className="text-xs">
+              Document Type: {getTypeName(selectedType)}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-3 w-3 ml-1 p-0"
+                onClick={() => onFilterChange("type", "All")}
               >
                 <X className="h-2 w-2" />
               </Button>

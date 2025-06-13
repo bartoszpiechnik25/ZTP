@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/DropdownMenu";
-import type { Document } from "../DocumentsPage";
 import { Checkbox } from "@/shared/components/ui/Checkbox";
+import { type Document, type DocumentExtension } from "@/features/documents/types";
 
 interface DocumentGridProps {
   documents: Document[];
@@ -19,7 +19,7 @@ interface DocumentGridProps {
   onDocumentClick: (documentId: string) => void;
 }
 
-const getFileIcon = (extension: string) => {
+const getFileIcon = (extension: DocumentExtension) => {
   switch (extension.toLowerCase()) {
     case "pdf":
     case "doc":
@@ -162,13 +162,14 @@ export default function DocumentGrid({
               <div className="flex justify-center">
                 <div className="relative">
                   <IconComponent className="h-16 w-16 text-muted-foreground" />
-                  {document.thumbnail && (
+                  {/* TODO: Implement thumbnail display */}
+                  {/* {document.thumbnail && (
                     <img
                       src={document.thumbnail}
                       alt={document.title}
                       className="absolute inset-0 h-16 w-16 object-cover rounded"
                     />
-                  )}
+                  )} */}
                 </div>
               </div>
 
@@ -176,7 +177,7 @@ export default function DocumentGrid({
               <div className="space-y-2">
                 <div>
                   <h3 className="font-medium text-sm leading-tight line-clamp-2">{document.title}</h3>
-                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{document.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{document.notes}</p>
                 </div>
 
                 {/* Metadata */}
@@ -197,22 +198,6 @@ export default function DocumentGrid({
                     {formatDate(document.modifiedAt)}
                   </div>
                 </div>
-
-                {/* Tags */}
-                {document.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1">
-                    {document.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                    {document.tags.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{document.tags.length - 3}
-                      </Badge>
-                    )}
-                  </div>
-                )}
               </div>
             </CardContent>
           </Card>

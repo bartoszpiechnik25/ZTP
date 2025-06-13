@@ -1,4 +1,4 @@
-import api from "@/app/api";
+import api from "@/app/axiosClient";
 import { PaginatedTodosSchema, CreateTodoSchema, TodoSchema, UpdateTodoSchema } from "@/features/research/schemas";
 import type { CreateTodo, Todo } from "@/features/research/types";
 import validateResponse from "@/shared/utils/validateResponse";

@@ -17,22 +17,18 @@ import { CatDocLogo } from "@/shared/components/ui/CatDocLogo";
 import { Separator } from "@/shared/components/ui/Separator";
 import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
 import { SidebarTrigger } from "@/shared/components/ui/Sidebar";
-import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { useTheme } from "@/app/providers/ThemeProvider";
 import { P } from "@/shared/components/ui/typography/Paragraph";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 // TODO: Refactor this component
 export function DashboardHeader() {
   const navigate = useNavigate();
-  const { user, clearAuth } = useAppStore();
+  const { user } = useAppStore();
+  const { signOut: handleSignOut } = useAuth();
   const isMobile = useIsMobile();
   const { setTheme } = useTheme();
-
-  const handleSignOut = () => {
-    clearAuth();
-    localStorage.removeItem("authToken");
-    navigate("/sign-in");
-  };
 
   // Mock user data for prototype
   const mockUser = user || {

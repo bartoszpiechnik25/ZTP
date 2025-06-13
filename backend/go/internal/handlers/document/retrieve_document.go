@@ -46,3 +46,27 @@ func (drs *DocumentRetrieverServiceImpl) GetAllUserDocuments(ctx context.Context
 	}
 	return documents, nil
 }
+
+func (drs *DocumentRetrieverServiceImpl) GetDocumentById(ctx context.Context, userId, documentId uuid.UUID) (*repository.GetDocumentByIdRow, error) {
+	// First verify that the user owns this document
+	ownsDocument, err := drs.documentStore.VerifyUserOwnsDocument(ctx, repository.VerifyUserOwnsDocumentParams{
+		UserID:     userId,
+		DocumentID: documentId,
+	})
+	if err != nil {
+		logrus.Error(err)
+		return nil, e.HandleDbError(errors.Wrap(err, "could not verify document ownership"))
+	}
+
+	if !ownsDocument {
+		return nil, errors.New("user does not own this document")
+	}
+
+	document, err := drs.documentStore.GetDocumentById(ctx, documentId)
+	if err != nil {
+		logrus.Error(err)
+		return nil, e.HandleDbError(errors.Wrap(err, "could not get document"))
+	}
+
+	return &document, nil
+}

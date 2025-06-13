@@ -5,10 +5,11 @@ import { persist } from "zustand/middleware";
 
 interface AppState {
   user: User | undefined;
+  authToken?: string;
   isAuthenticated: boolean;
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  setAuth: (user: User) => void;
+  setAuth: (user: User, token: string) => void;
   clearAuth: () => void;
 }
 
@@ -18,8 +19,8 @@ export const useAppStore = create<AppState>()(
       user: undefined,
       isAuthenticated: false,
       theme: "light",
-      setAuth: (user) => set({ user, isAuthenticated: true }),
-      clearAuth: () => set({ user: undefined, isAuthenticated: false }),
+      setAuth: (user, token) => set({ user, isAuthenticated: true, authToken: token }),
+      clearAuth: () => set({ user: undefined, isAuthenticated: false, authToken: undefined }),
       setTheme: (theme) => set({ theme }),
     }),
     {
@@ -27,6 +28,7 @@ export const useAppStore = create<AppState>()(
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
+        authToken: state.authToken,
       }),
     }
   )

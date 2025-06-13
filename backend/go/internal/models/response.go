@@ -30,7 +30,7 @@ func (resp *GetDocumentCategoriesResponse) Render(w http.ResponseWriter, r *http
 }
 
 type GetDocumentTypesResponse struct {
-	Types []repository.DocumentType`json:"types"`
+	Types []repository.DocumentType `json:"types"`
 }
 
 func (resp *GetDocumentTypesResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -42,5 +42,21 @@ type GetAllUserDocumentsResponse struct {
 }
 
 func (resp *GetAllUserDocumentsResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+type DocumentDetail struct {
+	ID       string  `json:"id"`
+	Title    *string `json:"title"`
+	Notes    *string `json:"notes"`
+	Category string  `json:"category"`
+	Type     string  `json:"type"`
+}
+
+type GetDocumentByIdResponse struct {
+	Document *DocumentDetail `json:"document"`
+}
+
+func (resp *GetDocumentByIdResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }

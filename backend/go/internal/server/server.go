@@ -49,13 +49,23 @@ func (s *Server) ConfigureHandlers() {
 	s.Router.Group(func(r chi.Router) {
 		r.Use(jwtauth.Verifier(s.jwtAuth))
 		r.Use(jwtauth.Authenticator(s.jwtAuth))
-		r.Get("/user/{username}", s.users.HandleGetByUsername)
-		r.Get("/user", s.users.HandleGetByEmail)
-		r.Post("/document/ocr/{id}", s.ocrService.HandleDetectDocumentText)
-		r.Post("/document", s.documents.HandleCreateDocument)
-		r.Get("/document/types", s.documents.HandleGetDocumentTypes)
-		r.Get("/document/categories", s.documents.HandleGetDocumentCategories)
-		r.Get("/user/documents", s.documents.HandleGetAllUserDocuments)
+
+		// User routes
+		r.Route("/user", func(r chi.Router) {
+			r.Get("/{username}", s.users.HandleGetByUsername)
+			r.Get("/", s.users.HandleGetByEmail)
+			r.Get("/documents", s.documents.HandleGetAllUserDocuments)
+		})
+
+		// Document routes
+		r.Route("/document", func(r chi.Router) {
+			r.Post("/", s.documents.HandleCreateDocument)
+			r.Get("/types", s.documents.HandleGetDocumentTypes)
+			r.Get("/categories", s.documents.HandleGetDocumentCategories)
+			r.Get("/{id}", s.documents.HandleGetDocumentById)
+			r.Delete("/{id}", s.documents.HandleDeleteDocument)
+			r.Post("/ocr/{id}", s.ocrService.HandleDetectDocumentText)
+		})
 	})
 
 	// Public routes

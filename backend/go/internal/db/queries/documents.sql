@@ -53,3 +53,63 @@ FROM
 WHERE
     ud.user_id = $1;
 
+-- name: GetDocumentById :one
+SELECT
+    d.id,
+    d.title,
+    d.notes,
+    dc.name AS category,
+    dt.name AS type
+FROM
+    documents d
+    JOIN document_categories dc ON dc.id = d.document_category_id
+    JOIN document_types dt ON dt.id = d.document_type_id
+WHERE
+    d.id = $1;
+
+-- name: GetDocumentWithPages :one
+SELECT
+    d.id,
+    d.title,
+    d.notes,
+    dc.name AS category,
+    dt.name AS type
+FROM
+    documents d
+    JOIN document_categories dc ON dc.id = d.document_category_id
+    JOIN document_types dt ON dt.id = d.document_type_id
+WHERE
+    d.id = $1;
+
+-- name: GetDocumentPages :many
+SELECT
+    id,
+    page_number,
+    content_type,
+    data,
+    ocr_content,
+    document_id
+FROM
+    document_pages
+WHERE
+    document_id = $1
+ORDER BY
+    page_number ASC;
+
+-- name: DeleteDocument :exec
+DELETE FROM documents
+WHERE id = $1;
+
+-- name: DeleteUserDocument :exec
+DELETE FROM user_documents
+WHERE user_id = $1 AND document_id = $2;
+
+-- name: DeleteDocumentPages :exec
+DELETE FROM document_pages
+WHERE document_id = $1;
+
+-- name: VerifyUserOwnsDocument :one
+SELECT COUNT(*) > 0 AS owns_document
+FROM user_documents
+WHERE user_id = $1 AND document_id = $2;
+

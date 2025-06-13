@@ -19,7 +19,7 @@ type Form = z.infer<typeof SignInRequestSchema>;
 
 const SignInForm = () => {
   const location = useLocation();
-  const { signIn, isLoading, isSignInError, signInError } = useAuth();
+  const { signIn, isLoading } = useAuth();
 
   const form = useForm<Form>({
     resolver: zodResolver(SignInRequestSchema),
@@ -30,20 +30,20 @@ const SignInForm = () => {
   });
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get("not-authorized")) {
+      console.log(`[LOG][SignInForm] User is not authorized`);
+      toast.error("You are not authorized", {
+        description: "Your session has expired. Please log in again.",
+      });
+    }
+
     if (location.state?.status === "signed-up-success") {
       toast.success("Registration successful!", {
         description: "Please sign in with your new account",
       });
     }
-  }, [location.state]);
-
-  useEffect(() => {
-    if (isSignInError) {
-      toast.error("Sign in failed", {
-        description: signInError?.message || "An error occurred while signing in. Please try again.",
-      });
-    }
-  }, [isSignInError, signInError]);
+  }, [location.search, location.state]);
 
   const onSubmit = (data: Form) => {
     signIn(data);

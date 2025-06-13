@@ -7,7 +7,7 @@ const AuthLayout = () => {
       <div className="flex flex-3 flex-col items-center justify-center gap-4">
         <Outlet />
       </div>
-      <div className="flex flex-2 relative">
+      <div className="flex flex-0 md:flex-2 relative">
         <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary"></div>
         <img
           src={backgroundImage}

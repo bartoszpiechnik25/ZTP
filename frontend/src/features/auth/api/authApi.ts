@@ -1,4 +1,4 @@
-import api from "@/app/api";
+import api from "@/app/axiosClient";
 import {
   SignInRequestSchema,
   SignUpRequestSchema,
@@ -35,7 +35,7 @@ const authApi = {
       return { user, token };
     } catch (error) {
       // check if the error has status code 401, if so, throw a specific error if not throw a generic error
-      if (isAxiosError(error) && isAxiosError(error) && error.response?.status === 404) {
+      if (isAxiosError(error) && error.response?.status === 404) {
         throw new Error("Invalid username or password. Provide correct credentials and try again.");
       }
       throw new Error("An error occurred during sign-in. Please try again.");
