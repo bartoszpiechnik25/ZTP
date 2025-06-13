@@ -38,7 +38,7 @@ const SignUpForm = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col justify-center absolute top-0 bottom-0 left-1/10 w-1/2 lg:w-1/3"
+      className="flex flex-col justify-center absolute top-0 bottom-0 left-1/10 w-1/2 md:w-1/3"
     >
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>

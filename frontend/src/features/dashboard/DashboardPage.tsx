@@ -1,51 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/Card";
 import { Button } from "@/shared/components/ui/Button";
-import { FileText, Upload, TrendingUp, Clock, Archive, MoreHorizontal } from "lucide-react";
+import { FileText, Upload, TrendingUp, Clock, Archive, MoreHorizontal, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Badge } from "@/shared/components/ui/Badge";
-
-// Mock data for prototype
-const mockStats = {
-  totalDocuments: 247,
-  recentUploads: 12,
-  pendingProcessing: 3,
-  storageUsed: "2.4 GB",
-};
-
-const mockRecentDocuments = [
-  {
-    id: "1",
-    title: "Financial Report Q4 2024",
-    type: "PDF",
-    uploadedAt: "2 hours ago",
-    status: "processed",
-    category: "Finance",
-  },
-  {
-    id: "2",
-    title: "Product Specification v2.1",
-    type: "DOCX",
-    uploadedAt: "1 day ago",
-    status: "processing",
-    category: "Technical",
-  },
-  {
-    id: "3",
-    title: "Marketing Campaign Analysis",
-    type: "PDF",
-    uploadedAt: "3 days ago",
-    status: "processed",
-    category: "Marketing",
-  },
-  {
-    id: "4",
-    title: "Legal Contract Template",
-    type: "PDF",
-    uploadedAt: "1 week ago",
-    status: "processed",
-    category: "Legal",
-  },
-];
+import { useDocument } from "@/features/documents/hooks/useDocument";
 
 // Function to get status color classes
 const getStatusColor = (status: string) => {
@@ -67,9 +25,32 @@ const getStatusColor = (status: string) => {
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { userDocuments: documents = [], isUserDocumentsLoading } = useDocument();
+  const totalDocuments = documents.length;
+  const recentUploads = documents.filter((doc) => {
+    const createdAt = new Date(doc.uploadedAt);
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    return createdAt >= sevenDaysAgo;
+  }).length;
+  const pendingProcessing = documents.filter((doc) => doc.status === "processing").length;
+  const storageUsed = documents.reduce((total, doc) => {
+    const sizeInKB = Number.parseInt(doc.size.replace(" KB", ""));
+    return total + (Number.isNaN(sizeInKB) ? 0 : sizeInKB);
+  }, 0);
+  const formattedStorageUsed = `${(storageUsed / 1024).toFixed(2)} MB`; // Convert KB to MB
+
+  if (isUserDocumentsLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="ml-4 text-lg text-muted-foreground">Loading documents...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 md:p-6">
       {/* Welcome Section */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -100,7 +81,8 @@ export default function DashboardPage() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{mockStats.totalDocuments}</div>
+            <div className="text-2xl font-bold">{totalDocuments}</div>
+            {/* TODO: Implement monthly growth calculation */}
             <p className="text-xs text-muted-foreground">+12% from last month</p>
           </CardContent>
         </Card>
@@ -111,7 +93,7 @@ export default function DashboardPage() {
             <Upload className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{mockStats.recentUploads}</div>
+            <div className="text-2xl font-bold">{recentUploads}</div>
             <p className="text-xs text-muted-foreground">This week</p>
           </CardContent>
         </Card>
@@ -122,7 +104,7 @@ export default function DashboardPage() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{mockStats.pendingProcessing}</div>
+            <div className="text-2xl font-bold">{pendingProcessing}</div>
             <p className="text-xs text-muted-foreground">Documents in queue</p>
           </CardContent>
         </Card>
@@ -133,7 +115,7 @@ export default function DashboardPage() {
             <Archive className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{mockStats.storageUsed}</div>
+            <div className="text-2xl font-bold">{formattedStorageUsed}</div>
             <p className="text-xs text-muted-foreground">of 10 GB limit</p>
           </CardContent>
         </Card>
@@ -152,39 +134,46 @@ export default function DashboardPage() {
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {mockRecentDocuments.map((doc) => (
-              <div
-                key={doc.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 cursor-pointer"
-                onClick={() => navigate(`/app/documents/${doc.id}`)}
-              >
-                <div className="flex items-center gap-4">
-                  <FileText className="h-8 w-8 text-muted-foreground" />
-                  <div className="space-y-1">
-                    <p className="font-medium leading-none">{doc.title}</p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span>{doc.type}</span>
-                      <span>•</span>
-                      <span>{doc.uploadedAt}</span>
-                      <span>•</span>
-                      <Badge variant="secondary" className="text-xs">
-                        {doc.category}
-                      </Badge>
+        {isUserDocumentsLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <p className="ml-4 text-lg text-muted-foreground">Loading documents...</p>
+          </div>
+        ) : (
+          <CardContent>
+            <div className="space-y-4">
+              {documents.map((doc) => (
+                <div
+                  key={doc.id}
+                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 cursor-pointer"
+                  onClick={() => navigate(`/app/documents/${doc.id}`)}
+                >
+                  <div className="flex items-center gap-4">
+                    <FileText className="h-8 w-8 text-muted-foreground" />
+                    <div className="space-y-1">
+                      <p className="font-medium leading-none">{doc.title}</p>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span>{doc.type}</span>
+                        <span>•</span>
+                        <span>{doc.uploadedAt}</span>
+                        <span>•</span>
+                        <Badge variant="secondary" className="text-xs">
+                          {doc.category}
+                        </Badge>
+                      </div>
                     </div>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Badge className={`text-xs ${getStatusColor(doc.status)}`}>{doc.status}</Badge>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge className={`text-xs ${getStatusColor(doc.status)}`}>{doc.status}</Badge>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
+              ))}
+            </div>
+          </CardContent>
+        )}
       </Card>
     </div>
   );

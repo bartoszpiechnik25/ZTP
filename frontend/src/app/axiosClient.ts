@@ -1,3 +1,4 @@
+import { useAppStore } from "@/shared/store/useAppStore";
 import axios, { isAxiosError, type AxiosInstance } from "axios";
 
 const DEFAULT_TIMEOUT_IN_MS = 1000;
@@ -13,7 +14,7 @@ const api: AxiosInstance = axios.create({
 // Add auth token to requests
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("authToken");
+    const token = useAppStore.getState().authToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -29,10 +30,9 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (isAxiosError(error) && error.response?.status === 401) {
-      console.error("Unauthorized. Please log in again.");
-      localStorage.removeItem("authToken");
+      console.error("User is not authorized.");
       localStorage.removeItem("app-storage");
-      window.location.href = "/sign-in";
+      window.location.href = "/sign-in?not-authorized";
     }
 
     throw error;

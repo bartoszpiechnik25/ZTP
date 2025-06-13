@@ -1,8 +1,8 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Card, CardContent } from "@/shared/components/ui/Card";
 import { Button } from "@/shared/components/ui/Button";
 import { Badge } from "@/shared/components/ui/Badge";
-import { Grid, List, Trash2 } from "lucide-react";
+import { Grid, List, Trash2, Loader2, FileIcon } from "lucide-react"; // Added Loader2
 import { useNavigate } from "react-router";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/Tabs";
 import AddDocumentButton from "@/features/documents/components/AddDocumentButton";
@@ -13,109 +13,8 @@ import DocumentList from "@/features/documents/components/DocumentList";
 import FilterControls from "@/features/documents/components/FilterControls";
 import PaginationControls from "@/features/documents/components/PaginationControls";
 import SearchBar from "@/features/documents/components/SearchBar";
-
-// Mock data for prototype
-const mockDocuments: Document[] = [
-  {
-    id: "1",
-    title: "Financial Report Q4 2024",
-    type: "PDF",
-    category: "Finance",
-    size: "2.3 MB",
-    uploadedAt: "2024-12-15T10:30:00Z",
-    modifiedAt: "2024-12-15T10:30:00Z",
-    status: "processed",
-    thumbnail: undefined,
-    description: "Quarterly financial report with revenue analysis",
-    tags: ["finance", "quarterly", "revenue"],
-    extension: "pdf",
-  },
-  {
-    id: "2",
-    title: "Product Specification v2.1",
-    type: "DOCX",
-    category: "Technical",
-    size: "1.8 MB",
-    uploadedAt: "2024-12-14T14:20:00Z",
-    modifiedAt: "2024-12-14T14:20:00Z",
-    status: "processing",
-    thumbnail: undefined,
-    description: "Technical specifications for product version 2.1",
-    tags: ["technical", "specification", "product"],
-    extension: "docx",
-  },
-  {
-    id: "3",
-    title: "Marketing Campaign Analysis",
-    type: "PDF",
-    category: "Marketing",
-    size: "3.1 MB",
-    uploadedAt: "2024-12-13T09:15:00Z",
-    modifiedAt: "2024-12-13T09:15:00Z",
-    status: "processed",
-    thumbnail: undefined,
-    description: "Analysis of Q4 marketing campaign performance",
-    tags: ["marketing", "campaign", "analysis"],
-    extension: "pdf",
-  },
-  {
-    id: "4",
-    title: "Legal Contract Template",
-    type: "PDF",
-    category: "Legal",
-    size: "890 KB",
-    uploadedAt: "2024-12-10T16:45:00Z",
-    modifiedAt: "2024-12-10T16:45:00Z",
-    status: "processed",
-    thumbnail: undefined,
-    description: "Standard legal contract template for vendors",
-    tags: ["legal", "contract", "template"],
-    extension: "pdf",
-  },
-  {
-    id: "5",
-    title: "Training Materials",
-    type: "PPTX",
-    category: "HR",
-    size: "4.2 MB",
-    uploadedAt: "2024-12-08T11:30:00Z",
-    modifiedAt: "2024-12-08T11:30:00Z",
-    status: "processed",
-    thumbnail: undefined,
-    description: "Employee training presentation materials",
-    tags: ["hr", "training", "presentation"],
-    extension: "pptx",
-  },
-  {
-    id: "6",
-    title: "Budget Planning 2025",
-    type: "XLSX",
-    category: "Finance",
-    size: "1.2 MB",
-    uploadedAt: "2024-12-07T13:20:00Z",
-    modifiedAt: "2024-12-07T13:20:00Z",
-    status: "failed",
-    thumbnail: undefined,
-    description: "Annual budget planning spreadsheet for 2025",
-    tags: ["finance", "budget", "planning"],
-    extension: "xlsx",
-  },
-];
-
-export interface Document {
-  id: string;
-  title: string;
-  type: string;
-  category: string;
-  size: string;
-  uploadedAt: string;
-  modifiedAt: string;
-  status: "processed" | "processing" | "failed";
-  thumbnail: string | undefined;
-  description: string;
-  tags: string[];
-  extension: string;
-}
+import { useDocument } from "@/features/documents/hooks/useDocument";
+import type { DocumentExtension, DocumentStatus } from "@/features/documents/types";
 
 export default function DocumentsPage() {
   const navigate = useNavigate();
@@ -126,27 +25,33 @@ export default function DocumentsPage() {
   const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{
+    category: string;
+    type: string;
+    extension: DocumentExtension;
+    status: DocumentStatus;
+  }>({
     category: "All",
     type: "All",
     extension: "All",
     status: "All",
   });
+  const { userDocuments: documents = [], isUserDocumentsLoading } = useDocument();
 
-  // Filter documents based on search and filters
-  const filteredDocuments = mockDocuments.filter((doc) => {
-    const matchesSearch =
-      doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredDocuments = useMemo(() => {
+    return documents.filter((doc) => {
+      const matchesSearch =
+        doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        doc.notes?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory = filters.category === "All" || doc.category === filters.category;
-    const matchesType = filters.type === "All" || doc.type === filters.type;
-    const matchesExtension = filters.extension === "All" || doc.extension === filters.extension;
-    const matchesStatus = filters.status === "All" || doc.status === filters.status;
+      const matchesCategory = filters.category === "All" || doc.category === filters.category;
+      const matchesType = filters.type === "All" || doc.type === filters.type;
+      const matchesExtension = filters.extension === "All" || doc.extension === filters.extension;
+      const matchesStatus = filters.status === "All" || doc.status === filters.status;
 
-    return matchesSearch && matchesCategory && matchesType && matchesExtension && matchesStatus;
-  });
+      return matchesSearch && matchesCategory && matchesType && matchesExtension && matchesStatus;
+    });
+  }, [documents, searchQuery, filters]);
 
   // Pagination
   const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
@@ -160,6 +65,7 @@ export default function DocumentsPage() {
 
   const handleFilterChange = (filterType: string, value: string) => {
     setFilters((prev) => ({ ...prev, [filterType]: value }));
+    setCurrentPage(1);
   };
 
   const handleDocumentSelect = useCallback((documentId: string, selected: boolean) => {
@@ -180,11 +86,13 @@ export default function DocumentsPage() {
   }, [selectedDocuments]);
 
   const confirmDelete = useCallback(() => {
-    // TODO: Implement delete functionality
+    // TODO: Implement delete mutation with react-query
+    // create a deleteDocumentsMutation(selectedDocuments)
+    // onSuccess: queryClient.invalidateQueries(['userDocuments'])
     console.log("Deleting documents:", selectedDocuments);
     setSelectedDocuments([]);
     setIsDeleteModalOpen(false);
-  }, [selectedDocuments]);
+  }, [selectedDocuments]); // queryClient should be a dependency if used
 
   const handleDocumentClick = useCallback(
     (documentId: string) => {
@@ -195,25 +103,27 @@ export default function DocumentsPage() {
 
   const handleAddDocument = () => {
     setIsAddModalOpen(false);
-    // Reset filters and search to show new document
     setSearchQuery("");
-    setFilters({
-      category: "All",
-      type: "All",
-      extension: "All",
-      status: "All",
-    });
+    setFilters({ category: "All", type: "All", extension: "All", status: "All" });
     setCurrentPage(1);
   };
 
+  if (isUserDocumentsLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="ml-4 text-lg text-muted-foreground">Loading documents...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-6 p-4 md:p-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Documents</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Documents</h1>
           <p className="text-muted-foreground">
-            Manage your document collection ({filteredDocuments.length} documents)
+            Manage your document collection ({filteredDocuments.length} of {documents.length} total documents)
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -227,7 +137,6 @@ export default function DocumentsPage() {
         </div>
       </div>
 
-      {/* Search and Filters */}
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-4">
@@ -243,7 +152,6 @@ export default function DocumentsPage() {
         </CardContent>
       </Card>
 
-      {/* View Mode Toggle and Results */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Badge variant="outline">{filteredDocuments.length} results</Badge>
@@ -252,25 +160,28 @@ export default function DocumentsPage() {
         <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as "list" | "grid")}>
           <TabsList>
             <TabsTrigger value="list">
-              <List className="h-4 w-4 mr-2" />
-              List
+              <List className="h-4 w-4 mr-2" /> List
             </TabsTrigger>
             <TabsTrigger value="grid">
-              <Grid className="h-4 w-4 mr-2" />
-              Grid
+              <Grid className="h-4 w-4 mr-2" /> Grid
             </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
 
-      {/* Document Display */}
       <div className="space-y-4">
-        {paginatedDocuments.length === 0 ? (
+        {paginatedDocuments.length === 0 && !isUserDocumentsLoading ? (
           <Card>
             <CardContent className="pt-6">
-              <div className="text-center space-y-2">
-                <div className="text-muted-foreground">No documents found</div>
-                <p className="text-sm text-muted-foreground">Try adjusting your search or filter criteria</p>
+              <div className="text-center py-10 space-y-2">
+                <FileIcon className="h-16 w-16 mx-auto text-muted-foreground/50" />
+                <p className="text-xl font-medium text-muted-foreground">No documents found</p>
+                <p className="text-sm text-muted-foreground">
+                  Try adjusting your search or filter criteria, or add a new document.
+                </p>
+                <Button onClick={() => setIsAddModalOpen(true)} className="mt-4">
+                  Add Document
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -299,9 +210,7 @@ export default function DocumentsPage() {
         )}
       </div>
 
-      {/* Modals */}
-      <AddDocumentModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdd={handleAddDocument} />
-
+      <AddDocumentModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdded={handleAddDocument} />
       <ConfirmDeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

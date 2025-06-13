@@ -11,6 +11,9 @@ const queryClient = new QueryClient({
         error,
         meta: query.meta,
       });
+      if (query.meta?.suppressGlobalToast) {
+        return;
+      }
       toast.error("Something went wrong", {
         description: error?.message || "An unexpected error occurred.",
       });
@@ -24,6 +27,9 @@ const queryClient = new QueryClient({
         mutation: meta?.mutationId,
         error,
       });
+      if (mutation.meta?.suppressGlobalToast) {
+        return;
+      }
       toast.error("Something went wrong", {
         description: error?.message || "An unexpected error occurred.",
       });

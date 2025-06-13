@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { useAppStore } from "@/shared/store/useAppStore";
 import authApi from "@/features/auth/api/authApi";
-import type { ForgotPasswordRequest, SignInRequest, SignUpRequest } from "@/features/auth/types";
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -11,24 +10,23 @@ export const useAuth = () => {
   const { user, setAuth, clearAuth, isAuthenticated } = useAppStore();
 
   const signInMutation = useMutation({
-    mutationFn: (credentials: SignInRequest) => authApi.signIn(credentials),
+    mutationFn: authApi.signIn,
     onSuccess: (data) => {
-      setAuth(data.user);
-      localStorage.setItem("authToken", data.token);
+      setAuth(data.user, data.token);
       queryClient.setQueryData(["user"], data.user);
       navigate("/app");
     },
   });
 
   const signUpMutation = useMutation({
-    mutationFn: (credentials: SignUpRequest) => authApi.signUp(credentials),
+    mutationFn: authApi.signUp,
     onSuccess: () => {
       navigate("/sign-in", { state: { status: "signed-up-success" } });
     },
   });
 
   const forgotPasswordMutation = useMutation({
-    mutationFn: (credentials: ForgotPasswordRequest) => authApi.forgotPassword(credentials),
+    mutationFn: authApi.forgotPassword,
     onSuccess: () => {
       navigate("/forgot-password/success");
     },
@@ -43,7 +41,6 @@ export const useAuth = () => {
 
   const signOut = useCallback(() => {
     clearAuth();
-    localStorage.removeItem("authToken");
     queryClient.removeQueries({ queryKey: ["user"] });
     navigate("/sign-in");
   }, [clearAuth, navigate, queryClient]);

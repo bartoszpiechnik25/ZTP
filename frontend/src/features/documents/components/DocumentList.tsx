@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/shared/components/ui/Card";
 import { Button } from "@/shared/components/ui/Button";
 import { Badge } from "@/shared/components/ui/Badge";
 import { Checkbox } from "@/shared/components/ui/Checkbox";
-import { FileText, File, Image, Video, Music, Archive, MoreHorizontal, Download, Trash2, Eye } from "lucide-react";
+import { FileText, File, Image, MoreHorizontal, Download, Trash2, Eye } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,9 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/DropdownMenu";
-import type { Document } from "../DocumentsPage";
 import AiTooltip from "@/features/documents/components/AiTooltip";
-
+import { type Document, type DocumentExtension } from "@/features/documents/types";
 interface DocumentListProps {
   documents: Document[];
   selectedDocuments: string[];
@@ -21,8 +20,8 @@ interface DocumentListProps {
   onDocumentClick: (documentId: string) => void;
 }
 
-const getFileIcon = (extension: string) => {
-  switch (extension.toLowerCase()) {
+const getFileIcon = (extension: DocumentExtension) => {
+  switch (extension) {
     case "pdf":
     case "doc":
     case "docx":
@@ -35,21 +34,6 @@ const getFileIcon = (extension: string) => {
     case "gif":
     case "svg": {
       return Image;
-    }
-    case "mp4":
-    case "avi":
-    case "mov": {
-      return Video;
-    }
-    case "mp3":
-    case "wav":
-    case "flac": {
-      return Music;
-    }
-    case "zip":
-    case "rar":
-    case "7z": {
-      return Archive;
     }
     default: {
       return File;
@@ -167,7 +151,7 @@ export default function DocumentList({
                     <IconComponent className="h-8 w-8 text-muted-foreground flex-shrink-0" />
                     <div className="min-w-0">
                       <p className="font-medium truncate">{document.title}</p>
-                      <p className="text-sm text-muted-foreground truncate">{document.description}</p>
+                      <p className="text-sm text-muted-foreground truncate">{document.notes}</p>
                     </div>
                   </div>
 

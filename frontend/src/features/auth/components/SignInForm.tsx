@@ -30,12 +30,20 @@ const SignInForm = () => {
   });
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get("not-authorized")) {
+      console.log(`[LOG][SignInForm] User is not authorized`);
+      toast.error("You are not authorized", {
+        description: "Your session has expired. Please log in again.",
+      });
+    }
+
     if (location.state?.status === "signed-up-success") {
       toast.success("Registration successful!", {
         description: "Please sign in with your new account",
       });
     }
-  }, [location.state]);
+  }, [location.search, location.state]);
 
   const onSubmit = (data: Form) => {
     signIn(data);

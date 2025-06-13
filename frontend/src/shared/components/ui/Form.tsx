@@ -13,6 +13,7 @@ import {
 
 import { cn } from "@/shared/utils/shadcn";
 import { Label } from "./Label";
+import { motion } from "motion/react";
 
 const Form = FormProvider;
 
@@ -127,9 +128,16 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   }
 
   return (
-    <p data-slot="form-message" id={formMessageId} className={cn("text-destructive text-sm", className)} {...props}>
+    <motion.p
+      initial={{ opacity: 0, y: "-100%" }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: "100%" }}
+      data-slot="form-message"
+      id={formMessageId}
+      className={cn("text-destructive text-sm", className)}
+    >
       {body}
-    </p>
+    </motion.p>
   );
 }
 

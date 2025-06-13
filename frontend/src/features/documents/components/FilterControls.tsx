@@ -4,17 +4,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Filter, X } from "lucide-react";
 import AiTooltip from "@/features/documents/components/AiTooltip";
 import { useDocument } from "@/features/documents/hooks/useDocument";
+import {
+  DOCUMENT_EXTENSIONS,
+  DOCUMENT_STATUSES,
+  type DocumentExtension,
+  type DocumentStatus,
+} from "@/features/documents/types";
 
 interface FilterControlsProps {
   selectedCategory: string;
   selectedType: string;
-  selectedExtension: string;
-  selectedStatus: string;
+  selectedExtension: DocumentExtension;
+  selectedStatus: DocumentStatus;
   onFilterChange: (type: string, value: string) => void;
 }
-
-const extensions = ["All", "pdf", "docx", "xlsx"];
-const statuses = ["All", "pending", "approved", "rejected"];
 
 export default function FilterControls({
   selectedCategory,
@@ -27,7 +30,6 @@ export default function FilterControls({
 
   const hasActiveFilters =
     selectedCategory !== "All" || selectedType !== "All" || selectedExtension !== "All" || selectedStatus !== "All";
-
   const clearAllFilters = () => {
     onFilterChange("category", "All");
     onFilterChange("type", "All");
@@ -43,8 +45,8 @@ export default function FilterControls({
     return count;
   };
 
-  const getCategoryName = (id: string) => categories.find((c) => c.id === id)?.name || id;
-  const getTypeName = (id: string) => types.find((t) => t.id === id)?.name || id;
+  const getCategoryName = (id: string) => categories?.find((c) => c.id === id)?.name || id;
+  const getTypeName = (id: string) => types?.find((t) => t.id === id)?.name || id;
 
   return (
     <div className="flex flex-wrap items-center gap-4">
@@ -64,9 +66,8 @@ export default function FilterControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All</SelectItem>
-            {categories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
+            {categories?.map((category) => (
+              <SelectItem key={category.id} value={category.name}>
                 {category.name}
               </SelectItem>
             ))}
@@ -82,9 +83,8 @@ export default function FilterControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All</SelectItem>
-            {types.map((type) => (
-              <SelectItem key={type.id} value={type.id}>
+            {types?.map((type) => (
+              <SelectItem key={type.id} value={type.name}>
                 {type.name}
               </SelectItem>
             ))}
@@ -100,7 +100,7 @@ export default function FilterControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {extensions.map((extension) => (
+            {DOCUMENT_EXTENSIONS.map((extension) => (
               <SelectItem key={extension} value={extension}>
                 {extension === "All" ? "All" : extension.toUpperCase()}
               </SelectItem>
@@ -117,7 +117,7 @@ export default function FilterControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {statuses.map((status) => (
+            {DOCUMENT_STATUSES.map((status) => (
               <SelectItem key={status} value={status}>
                 {status === "All" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
               </SelectItem>

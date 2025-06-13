@@ -29,6 +29,7 @@ export default tseslint.config(
       "unicorn/prefer-global-this": "off",
       // Disable unicorn/filename-case for specific file, force pascalCase for React components
       "unicorn/filename-case": ["error", { case: "pascalCase", ignore: ["index.tsx", "main.tsx", "^.+\.ts$"] }],
+      "unicorn/no-array-reduce": "off",
     },
   },
   eslintPluginPrettier,

@@ -34,7 +34,7 @@ export const CreateDocumentRequestSchema = z.object({
 
 export const UserDocumentSchema = z.object({
   id: z.string(),
-  title: z.string().optional(),
+  title: z.string(),
   notes: z.string().optional(),
   category: z.string(),
   type: z.string(),
